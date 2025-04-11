@@ -27,4 +27,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\Cake.frag" />
+    <CopyFileToFolders Include="Shaders\Cake.vert" />
+  </ItemGroup>
 </Project>

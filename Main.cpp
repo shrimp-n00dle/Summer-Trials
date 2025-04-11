@@ -4,8 +4,25 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
+/*Shader implementation*/
+#include <string>
+#include <iostream>
+
 int main(void)
 {
+    std::fstream vertSrc("Shaders/Cake.vert");
+    std::stringstream vertBuff;
+    vertBuff << vertSrc.rdbuf();
+    std::string vertS = vertBuff.str();
+    const char* v = vertS.c_str();
+
+
+    std::fstream fragSrc("Shaders/Cake.frag");
+    std::stringstream fragBuff;
+    fragBuff << fragSrc.rdbuf();
+    std::string fragS = fragBuff.str();
+    const char* f = fragS.c_str();
+
     GLFWwindow* window;
 
     /* Initialize the library */
@@ -39,6 +56,33 @@ int main(void)
     /*calling the initializing of glad*/
     gladLoadGL();
 
+    //Vertex
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    //Assign the source to vertex shader
+    glShaderSource(vertexShader, 1, &v, NULL);
+    glCompileShader(vertexShader);
+
+    //Fragment
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1 , &f, NULL);
+    glCompileShader(fragmentShader);
+
+    /*Create the shader program*/
+    GLuint shaderProg = glCreateProgram();
+    //Attach the compiled Vertex Shader
+    glAttachShader(shaderProg, vertexShader);
+    //Attach the compiled Fragment Shader
+    glAttachShader(shaderProg, fragmentShader);
+
+    glLinkProgram(shaderProg);
+
+
+
+
+
+
+
+
     /*Initial definition of verticies array*/
     GLfloat verticiesSetUp[]
     { -0.5f,-0.5f,0,0,0.5f,0,0.5f,-0.5f,0 };
@@ -66,6 +110,8 @@ int main(void)
         mesh_indicies.push_back(objShapes[0].mesh.indices[i].vertex_index);
     }
 
+
+    glUseProgram(shaderProg);
     /*Bind the VAO so all other funtions after this will follow the VAO*/
     glBindVertexArray(VAO);
 
