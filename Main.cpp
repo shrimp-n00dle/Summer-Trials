@@ -1,6 +1,9 @@
 #include <glad/glad.h> /*This helps with simplifying runtime when dealing with pointers*/
 #include <GLFW/glfw3.h>
 
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
+
 int main(void)
 {
     GLFWwindow* window;
@@ -8,6 +11,19 @@ int main(void)
     /* Initialize the library */
     if (!glfwInit())
         return -1;
+
+    /*OBJ INITIALIZATION*/
+    std::string path = "3D/bunny.obj";
+    std::vector<tinyobj::shape_t> objShapes;
+    std::vector<tinyobj::material_t> objMeshShapes;
+
+    std::string warning, error;
+
+    /*Basic Attributes related to mesh*/
+    tinyobj::attrib_t attributes;
+
+    /*Load Mesh*/
+    bool success = tinyobj::LoadObj(&attributes, &objShapes, &objMeshShapes, &warning, &error, path.c_str());
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Summer Trials", NULL, NULL);
@@ -31,11 +47,24 @@ int main(void)
     Vertex Buffer Object - store an array of unformatted memory allocated by the OpenGL context (AKA the GPU). These can be used to store vertex data,
     Element Buffer Object - This will reduce the number of vertices by removing redundant ones*/
 
+    //EBO Index Array
+    GLuint indicies[]{ 0,1,2 };
+
     /*VAO VBO Intialization*/
-    GLuint VAO, VBO;
+    GLuint VAO, VBO, EBO;
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    /*EBO Bind*/
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    std::vector<GLuint> mesh_indicies;
+    for (int i = 0; i < objShapes[0].mesh.indices.size(); i++)
+    {
+        mesh_indicies.push_back(objShapes[0].mesh.indices[i].vertex_index);
+    }
 
     /*Bind the VAO so all other funtions after this will follow the VAO*/
     glBindVertexArray(VAO);
@@ -49,8 +78,15 @@ int main(void)
     the vertext array
     renderer*/
     
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticiesSetUp), verticiesSetUp, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT) * attributes.vertices.size(), &attributes.vertices[0], GL_STATIC_DRAW);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(verticiesSetUp), verticiesSetUp, GL_STATIC_DRAW);
 
+    /*Create Element Array Buffer to store the indicies*/
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+    /*Parameters - Gets the data insied the buffer variable, size of the whole buffer in bytes, index array, rendererer*/
+   // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mesh_indicies.size(), mesh_indicies.data(), GL_STATIC_DRAW);
 
     /*How can the VAO interpte VBO? 
     Parameters - VAO Id number, 3 bc XYZ, what datat do u want it to return, not sure, the size of the vertex data
@@ -67,6 +103,11 @@ int main(void)
     /*Overwritten by the  glBufferData/glVertexAttribPointer*/
     glBindVertexArray(0);
 
+  
+
+
+
+
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -78,7 +119,10 @@ int main(void)
         //Call binder for renderer
         glBindVertexArray(VAO);
         //draw
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        //instead of glDrawArrays(GL_TRIANGLES,0,3) you can simplify things by replacing it with the one below
+        /*parameters - type of primitive to use, number of vertices, datat type of index*/
+        glDrawElements(GL_TRIANGLES,mesh_indicies.size(), GL_UNSIGNED_INT, 0);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -90,6 +134,7 @@ int main(void)
     /*Clean the vertex annd buffers*/
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 
     glfwTerminate();
     return 0;
