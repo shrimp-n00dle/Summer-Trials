@@ -1,6 +1,10 @@
 #include <glad/glad.h> /*This helps with simplifying runtime when dealing with pointers*/
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
@@ -8,15 +12,47 @@
 #include <string>
 #include <iostream>
 
+//Modifier for model's x Position
+float x_mod = 0.0f;
+
+void Key_Callback(GLFWwindow* window, int key, 
+                    int scancode /*Physical position of the press*/,
+                    int action /*Press/Release*/,
+                    int mods /*Which key is held down*/)
+{
+    if (key == GLFW_KEY_D && action == GLFW_PRESS)
+    {
+        x_mod += 0.1f;
+    }
+
+}
+
+float x = -0.0f, y = -0.0f, z = 0.f;
+glm::mat4 identity_matrix = glm::mat4(1.0f);
+
+float scale_x = 0.5f;
+float scale_y = 0.5f;
+float scale_z = 0.5f;
+
+float theta = 0.0f;
+
+float axis_x = 0.f;
+float axis_y = 1.f;
+float axis_z = 0.f;
+
 int main(void)
 {
+
+    /*shaders are programs that the GPU executes to control how graphics are rendered*/
+    /*Vertex shaders process vertex data, affecting object geometry,*/
     std::fstream vertSrc("Shaders/Cake.vert");
     std::stringstream vertBuff;
     vertBuff << vertSrc.rdbuf();
     std::string vertS = vertBuff.str();
     const char* v = vertS.c_str();
 
-
+    /*Fragments are the individual samples of pixels that are covered by a primitive (like a triangle), and fragment shaders process each fragment to determine its final color and depth.*/
+    /*fragment shaders determine pixel colors, adding shading and texture details. */
     std::fstream fragSrc("Shaders/Cake.frag");
     std::stringstream fragBuff;
     fragBuff << fragSrc.rdbuf();
@@ -30,7 +66,7 @@ int main(void)
         return -1;
 
     /*OBJ INITIALIZATION*/
-    std::string path = "3D/bunny.obj";
+    std::string path = "3D/sphere.obj";
     std::vector<tinyobj::shape_t> objShapes;
     std::vector<tinyobj::material_t> objMeshShapes;
 
@@ -43,7 +79,7 @@ int main(void)
     bool success = tinyobj::LoadObj(&attributes, &objShapes, &objMeshShapes, &warning, &error, path.c_str());
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Summer Trials", NULL, NULL);
+    window = glfwCreateWindow(600, 600, "Jan Vingno", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -55,6 +91,23 @@ int main(void)
 
     /*calling the initializing of glad*/
     gladLoadGL();
+
+    glViewport(0, //Min X
+               0, //Min Y
+               600, //Width
+               600); //Height
+    
+
+    glm::mat4 projection = glm::ortho(-2.0f, //left most point
+        2.0f, //right most point
+        -2.0f, //bottom most point
+        2.0f, //top most poinr
+        -1.f, // Z Near
+        1.0f); //Z Far
+
+
+
+    //glfwSetKeyCallback(window, Key_Callback);
 
     //Vertex
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -149,17 +202,44 @@ int main(void)
     /*Overwritten by the  glBufferData/glVertexAttribPointer*/
     glBindVertexArray(0);
 
-  
-
-
-
-
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
+
+        //Get the variable named transform _matrix
+        glm::mat4 identity_matrix = glm::mat4(1.0f);
+
+        glm::mat4 transformation_matrix = glm::translate(
+            identity_matrix,
+            glm::vec3(x, y, z));
+
+        transformation_matrix = glm::scale(
+            transformation_matrix,
+            glm::vec3(scale_x, scale_y, scale_z));
+
+        transformation_matrix = glm::rotate(
+            transformation_matrix,
+            glm::radians(theta),
+            glm::normalize(glm::vec3(axis_x, axis_y, axis_z)));
+
+        //Get the variable named transform from one of the shaders
+       //attached to the shaderProg
+        unsigned int transformLoc = glGetUniformLocation(shaderProg, "transform");
+
+        //assign the matrix
+        glUniformMatrix4fv(transformLoc, //Address to the transform variable
+            1, //How many matrices to assign
+            GL_FALSE, //Transpose
+            glm::value_ptr(transformation_matrix)); // pointer to the matrix
+
+        //Get x in the shader file
+        //unsigned int xLoc = glGetUniformLocation(shaderProg, "x");
+        //assign x by usingits address
+        //glUniform1f(xLoc, x_mod);
 
         /*Triangle Rendering*/
         //Call binder for renderer
