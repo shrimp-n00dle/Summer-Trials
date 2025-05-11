@@ -226,6 +226,13 @@ int main(void)
             glm::radians(theta),
             glm::normalize(glm::vec3(axis_x, axis_y, axis_z)));
 
+        //Setting the projection 
+        unsigned int projLoc = glGetUniformLocation(shaderProg, "projection");
+        glUniformMatrix4fv(projLoc, //Address of the variable
+                            1, //How many value are we modifying
+                            GL_FALSE, 
+                            glm::value_ptr(transformation_matrix)); //Projection Matrix
+
         //Get the variable named transform from one of the shaders
        //attached to the shaderProg
         unsigned int transformLoc = glGetUniformLocation(shaderProg, "transform");
