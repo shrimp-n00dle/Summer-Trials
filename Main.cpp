@@ -12,6 +12,9 @@
 #include <string>
 #include <iostream>
 
+/*Physics*/
+#include "Physics/MyVector.h"
+
 //Modifier for model's x Position
 float x_mod = 0.0f;
 
