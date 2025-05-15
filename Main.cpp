@@ -1,9 +1,4 @@
-#include <glad/glad.h> /*This helps with simplifying runtime when dealing with pointers*/
-#include <GLFW/glfw3.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 
@@ -261,6 +256,7 @@ int main(void)
         /*parameters - type of primitive to use, number of vertices, datat type of index*/
         glDrawElements(GL_TRIANGLES,mesh_indicies.size(), GL_UNSIGNED_INT, 0);
 
+/***************************************************8/
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
