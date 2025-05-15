@@ -6,14 +6,15 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include "tiny_obj_loader.h"
+
 
 /*Shader implementation*/
 #include <string>
 #include <iostream>
 
-/*Physics*/
+/*Physics and Custom Classes inclusion*/
 #include "Physics/MyVector.h"
+#include "Classes/Model.h"
 
 //Modifier for model's x Position
 float x_mod = 0.0f;
