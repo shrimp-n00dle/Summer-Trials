@@ -2,7 +2,6 @@
 
 #define TINYOBJLOADER_IMPLEMENTATION
 
-
 /*Shader implementation*/
 #include <string>
 #include <iostream>
@@ -10,6 +9,16 @@
 /*Physics and Custom Classes inclusion*/
 #include "Physics/MyVector.h"
 #include "Classes/Model.h"
+
+
+/*
+* TO DO LIST:
+* Move model transformations to the Model Class
+* Push
+* Remove all old code
+* push
+* Move all model initialization to contructor
+*/
 
 //Modifier for model's x Position
 float x_mod = 0.0f;
@@ -63,6 +72,12 @@ int main(void)
     /* Initialize the library */
     if (!glfwInit())
         return -1;
+
+    /*Model*/
+    Model model = Model();
+    Physics::MyVector sample(0, 0, 0);
+    Physics::MyVector sampleScale(0.5f, 0.5f, 0.5f);
+    Physics::MyVector sampleRotate(0.5f, 1.0f, 0.5f);
 
     /*OBJ INITIALIZATION*/
     std::string path = "3D/sphere.obj";
@@ -210,20 +225,25 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         //Get the variable named transform _matrix
-        glm::mat4 identity_matrix = glm::mat4(1.0f);
 
-        glm::mat4 transformation_matrix = glm::translate(
-            identity_matrix,
-            glm::vec3(x, y, z));
+        model.MoveModel(sample);
 
-        transformation_matrix = glm::scale(
-            transformation_matrix,
-            glm::vec3(scale_x, scale_y, scale_z));
+       // glm::mat4 transformation_matrix = glm::translate(
+         //   identity_matrix,
+           // glm::vec3(sample.x,sample.y,sample.z));
 
-        transformation_matrix = glm::rotate(
-            transformation_matrix,
-            glm::radians(theta),
-            glm::normalize(glm::vec3(axis_x, axis_y, axis_z)));
+        model.scaleModel(sampleScale);
+
+        //transformation_matrix = glm::scale(
+          //  transformation_matrix,
+            //glm::vec3(scale_x, scale_y, scale_z));
+
+        model.rotateModel(sampleRotate, theta);
+
+        //transformation_matrix = glm::rotate(
+          //  transformation_matrix,
+            //glm::radians(theta),
+            //glm::normalize(glm::vec3(axis_x, axis_y, axis_z)));
 
         //Setting the projection 
         unsigned int projLoc = glGetUniformLocation(shaderProg, "projection");
@@ -256,7 +276,7 @@ int main(void)
         /*parameters - type of primitive to use, number of vertices, datat type of index*/
         glDrawElements(GL_TRIANGLES,mesh_indicies.size(), GL_UNSIGNED_INT, 0);
 
-/***************************************************8/
+/********************DO NOT TOUCH CODE BELOW*******************************8/
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
