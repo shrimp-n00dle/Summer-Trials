@@ -13,8 +13,8 @@
 
 /*
 * TO DO LIST:
-* Move model transformations to the Model Class
-* Push
+* Move model transformations to the Model Class - DONE
+* Push - DONE
 * Remove all old code
 * push
 * Move all model initialization to contructor
@@ -34,19 +34,6 @@ void Key_Callback(GLFWwindow* window, int key,
     }
 
 }
-
-float x = -0.0f, y = -0.0f, z = 0.f;
-glm::mat4 identity_matrix = glm::mat4(1.0f);
-
-float scale_x = 0.5f;
-float scale_y = 0.5f;
-float scale_z = 0.5f;
-
-float theta = 0.0f;
-
-float axis_x = 0.f;
-float axis_y = 1.f;
-float axis_z = 0.f;
 
 int main(void)
 {
@@ -87,8 +74,10 @@ int main(void)
 
     std::string warning, error;
 
+    /*Basic Attributes related to mesh*/
     tinyobj::attrib_t attributes;
 
+    /*Load Mesh*/
     bool success = tinyobj::LoadObj(&attributes, &objShapes, &objMeshShapes, &warning, &error, path.c_str());
 
     /* Create a windowed mode window and its OpenGL context */
@@ -142,23 +131,9 @@ int main(void)
 
     glLinkProgram(shaderProg);
 
-
-
-
-
-
-
-
-    /*Initial definition of verticies array*/
-    GLfloat verticiesSetUp[]
-    { -0.5f,-0.5f,0,0,0.5f,0,0.5f,-0.5f,0 };
-
     /*Vertex Array Object* - It stores the format of the vertex data as well as the Buffer Objects (see below) providing the vertex data arrays
     Vertex Buffer Object - store an array of unformatted memory allocated by the OpenGL context (AKA the GPU). These can be used to store vertex data,
     Element Buffer Object - This will reduce the number of vertices by removing redundant ones*/
-
-    //EBO Index Array
-    GLuint indicies[]{ 0,1,2 };
 
     /*VAO VBO Intialization*/
     GLuint VAO, VBO, EBO;
@@ -197,7 +172,6 @@ int main(void)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
     /*Parameters - Gets the data insied the buffer variable, size of the whole buffer in bytes, index array, rendererer*/
-   // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mesh_indicies.size(), mesh_indicies.data(), GL_STATIC_DRAW);
 
     /*How can the VAO interpte VBO? 
@@ -223,55 +197,19 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //Get the variable named transform _matrix
-
+        /*Model Modifications*/
         model.MoveModel(sample);
-
-       // glm::mat4 transformation_matrix = glm::translate(
-         //   identity_matrix,
-           // glm::vec3(sample.x,sample.y,sample.z));
 
         model.scaleModel(sampleScale);
 
-        //transformation_matrix = glm::scale(
-          //  transformation_matrix,
-            //glm::vec3(scale_x, scale_y, scale_z));
-
-        model.rotateModel(sampleRotate, theta);
+        model.rotateModel(sampleRotate, 0.0f /*theta*/);
 
         model.renderModel(shaderProg);
-
-        //transformation_matrix = glm::rotate(
-          //  transformation_matrix,
-            //glm::radians(theta),
-            //glm::normalize(glm::vec3(axis_x, axis_y, axis_z)));
-
-        //Setting the projection 
-        //unsigned int projLoc = glGetUniformLocation(shaderProg, "projection");
-        //glUniformMatrix4fv(projLoc, //Address of the variable
-          //                  1, //How many value are we modifying
-            //                GL_FALSE, 
-              //              glm::value_ptr(transformation_matrix)); //Projection Matrix
-
-        //Get the variable named transform from one of the shaders
-       //attached to the shaderProg
-       // unsigned int transformLoc = glGetUniformLocation(shaderProg, "transform");
-
-        //assign the matrix
-       // glUniformMatrix4fv(transformLoc, //Address to the transform variable
-         //   1, //How many matrices to assign
-           // GL_FALSE, //Transpose
-           // glm::value_ptr(transformation_matrix)); // pointer to the matrix
-
-        //Get x in the shader file
-        //unsigned int xLoc = glGetUniformLocation(shaderProg, "x");
-        //assign x by usingits address
-        //glUniform1f(xLoc, x_mod);
+        /*Model Modifications*/
 
         /*Triangle Rendering*/
         //Call binder for renderer
         glBindVertexArray(VAO);
-        //draw
 
         //instead of glDrawArrays(GL_TRIANGLES,0,3) you can simplify things by replacing it with the one below
         /*parameters - type of primitive to use, number of vertices, datat type of index*/
