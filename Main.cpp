@@ -247,20 +247,20 @@ int main(void)
 
         //Setting the projection 
         unsigned int projLoc = glGetUniformLocation(shaderProg, "projection");
-        glUniformMatrix4fv(projLoc, //Address of the variable
-                            1, //How many value are we modifying
-                            GL_FALSE, 
-                            glm::value_ptr(transformation_matrix)); //Projection Matrix
+        //glUniformMatrix4fv(projLoc, //Address of the variable
+          //                  1, //How many value are we modifying
+            //                GL_FALSE, 
+              //              glm::value_ptr(transformation_matrix)); //Projection Matrix
 
         //Get the variable named transform from one of the shaders
        //attached to the shaderProg
         unsigned int transformLoc = glGetUniformLocation(shaderProg, "transform");
 
         //assign the matrix
-        glUniformMatrix4fv(transformLoc, //Address to the transform variable
-            1, //How many matrices to assign
-            GL_FALSE, //Transpose
-            glm::value_ptr(transformation_matrix)); // pointer to the matrix
+       // glUniformMatrix4fv(transformLoc, //Address to the transform variable
+         //   1, //How many matrices to assign
+           // GL_FALSE, //Transpose
+           // glm::value_ptr(transformation_matrix)); // pointer to the matrix
 
         //Get x in the shader file
         //unsigned int xLoc = glGetUniformLocation(shaderProg, "x");
