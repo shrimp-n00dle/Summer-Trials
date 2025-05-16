@@ -15,8 +15,8 @@
 * TO DO LIST:
 * Move model transformations to the Model Class - DONE
 * Push - DONE
-* Remove all old code
-* push
+* Remove all old code - DONE
+* push - DONE
 * Move all model initialization to contructor
 */
 
