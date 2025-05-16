@@ -28,6 +28,7 @@ class Model
 		void MoveModel(Physics::MyVector newPos);
 		void scaleModel(Physics::MyVector newScale);
 		void rotateModel(Physics::MyVector newAngle, float theta);
+		void renderModel(GLuint shader);
 		
 };
 

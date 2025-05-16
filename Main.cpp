@@ -79,6 +79,7 @@ int main(void)
     Physics::MyVector sampleScale(0.5f, 0.5f, 0.5f);
     Physics::MyVector sampleRotate(0.5f, 1.0f, 0.5f);
 
+
     /*OBJ INITIALIZATION*/
     std::string path = "3D/sphere.obj";
     std::vector<tinyobj::shape_t> objShapes;
@@ -86,10 +87,8 @@ int main(void)
 
     std::string warning, error;
 
-    /*Basic Attributes related to mesh*/
     tinyobj::attrib_t attributes;
 
-    /*Load Mesh*/
     bool success = tinyobj::LoadObj(&attributes, &objShapes, &objMeshShapes, &warning, &error, path.c_str());
 
     /* Create a windowed mode window and its OpenGL context */
@@ -240,13 +239,15 @@ int main(void)
 
         model.rotateModel(sampleRotate, theta);
 
+        model.renderModel(shaderProg);
+
         //transformation_matrix = glm::rotate(
           //  transformation_matrix,
             //glm::radians(theta),
             //glm::normalize(glm::vec3(axis_x, axis_y, axis_z)));
 
         //Setting the projection 
-        unsigned int projLoc = glGetUniformLocation(shaderProg, "projection");
+        //unsigned int projLoc = glGetUniformLocation(shaderProg, "projection");
         //glUniformMatrix4fv(projLoc, //Address of the variable
           //                  1, //How many value are we modifying
             //                GL_FALSE, 
@@ -254,7 +255,7 @@ int main(void)
 
         //Get the variable named transform from one of the shaders
        //attached to the shaderProg
-        unsigned int transformLoc = glGetUniformLocation(shaderProg, "transform");
+       // unsigned int transformLoc = glGetUniformLocation(shaderProg, "transform");
 
         //assign the matrix
        // glUniformMatrix4fv(transformLoc, //Address to the transform variable
