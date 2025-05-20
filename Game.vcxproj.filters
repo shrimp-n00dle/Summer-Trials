@@ -24,10 +24,13 @@
     <ClCompile Include="Classes\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physics\MyVector.cpp">
+    <ClCompile Include="P6\MyVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="P6\MyParticle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +41,13 @@
     <ClInclude Include="Classes\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\MyVector.h">
+    <ClInclude Include="P6\MyVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Classes\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="P6\MyParticle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,7 +9,7 @@
 
 #include "../tiny_obj_loader.h"
 
-#include "../Physics/MyVector.h"
+#include "../P6/MyVector.h"
 #include "Shader.h"
 
 class Model
@@ -42,9 +42,9 @@ class Model
 
 
 		/*Linear Transformation*/
-		void MoveModel(Physics::MyVector newPos);
-		void scaleModel(Physics::MyVector newScale);
-		void rotateModel(Physics::MyVector newAngle, float theta);
+		void MoveModel(P6::MyVector newPos);
+		void scaleModel(P6::MyVector newScale);
+		void rotateModel(P6::MyVector newAngle, float theta);
 
 
 		void renderModel(Shader shader);

@@ -6,17 +6,22 @@
 #include <string>
 #include <iostream>
 
-/*Physics and Custom Classes inclusion*/
-#include "Physics/MyVector.h"
+/*P6 and Custom Classes inclusion*/
+#include "P6/MyVector.h"
+#include "P6/MyParticle.h"
 #include "Classes/Model.h"
 #include "Classes/Shader.h"
 
-/*TO DO
-*View Class
-*/
+//Import the libraries
+#include <chrono>
+using namespace std::chrono_literals;
+//This is going to be our time in between "frames"
+constexpr std::chrono::nanoseconds timestep(16ms);
+
 
 //Modifier for model's x Position
 float x_mod = 0.0f;
+
 
 void Key_Callback(GLFWwindow* window, int key, 
                     int scancode /*Physical position of the press*/,
@@ -72,23 +77,62 @@ int main(void)
     Model model = Model("3D/sphere.obj");
 
     /*Model Transformations*/
-    Physics::MyVector sample(0, 0, 0);
-    Physics::MyVector sampleScale(0.5f, 0.5f, 0.5f);
-    Physics::MyVector sampleRotate(0.5f, 1.0f, 0.5f);
+    P6::MyVector sample(0, 0, 0);
+    P6::MyVector sampleScale(0.5f, 0.5f, 0.5f);
+    P6::MyVector sampleRotate(0.5f, 1.0f, 0.5f);
 
     /*Model Binding*/
     model.bind(modelShader);
 
+    /*PARTICLE IMPLEMETATION*/
+    P6::MyParticle particle = P6::MyParticle();
+    particle.Velocity = P6::MyVector(1, 0, 0);
+    particle.Position = P6::MyVector(0, 0, 0);
+    particle.Acceleration = P6::MyVector(-3, 0, 0);
+
     //glfwSetKeyCallback(window, Key_Callback);
+
+    /*TIME IMPLEMENTATION*/
+    using clock = std::chrono::high_resolution_clock;
+    auto curr_time = clock::now();
+    auto prev_time = curr_time;
+    std::chrono::nanoseconds curr_ns(0);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        /*TIME IMPLEMENTAITION*/
+        curr_time = clock::now();
+
+        //Duration checker
+        auto dur = std::chrono::duration_cast<std::chrono::nanoseconds> (curr_time - prev_time);
+
+        prev_time = curr_time;
+
+        //add dur to last iteration to the time since our last frame
+        curr_ns += dur;
+        if (curr_ns >= timestep)
+        {
+            //ms converstion
+            auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(curr_ns);
+            std::cout << "MS: " << (float)ms.count() << "\n";
+
+            //Reset
+            curr_ns -= curr_ns;
+
+            particle.Update((float)ms.count() / 1000);
+
+            std::cout << "P6" << std::endl;
+        }
+
+        std::cout << "NORMAL" << std::endl;
+
+
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
         /*Model Modifications*/
-        model.MoveModel(sample);
+        model.MoveModel(particle.Position);
         model.scaleModel(sampleScale);
         model.rotateModel(sampleRotate, 0.0f /*theta*/);
 

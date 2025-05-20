@@ -12,17 +12,17 @@ Model::Model(std::string name)
     bool success = tinyobj::LoadObj(&attributes, &objShapes, &objMeshShapes, &warning, &error, path.c_str());
 }
 
-void Model::MoveModel(Physics::MyVector newPos)
+void Model::MoveModel(P6::MyVector newPos)
 {
 	transformation_matrix = glm::translate(identity_matrix, glm::vec3(newPos));
 };
 
-void Model::scaleModel(Physics::MyVector newScale)
+void Model::scaleModel(P6::MyVector newScale)
 {
 	transformation_matrix = glm::scale( transformation_matrix, glm::vec3(newScale));
 }
 
-void Model::rotateModel(Physics::MyVector newAngle, float theta)
+void Model::rotateModel(P6::MyVector newAngle, float theta)
 {
 	transformation_matrix = glm::rotate(
      transformation_matrix,

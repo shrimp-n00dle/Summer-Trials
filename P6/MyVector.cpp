@@ -1,6 +1,6 @@
 #include "MyVector.h"
 
-float Physics::MyVector::Magnitude()
+float P6::MyVector::Magnitude()
 {
 	magnitude = sqrtf(
 						(sqrtf(x) + sqrtf(y) + sqrt(z))
@@ -9,19 +9,19 @@ float Physics::MyVector::Magnitude()
 	return magnitude;
 }
 
-Physics::MyVector Physics::MyVector::Direction()
+P6::MyVector P6::MyVector::Direction()
 {
 	return MyVector(x / magnitude, y / magnitude, z / magnitude);
 }
 
-Physics::MyVector Physics::MyVector::scalarMultiplication(const float value)
+P6::MyVector P6::MyVector::scalarMultiplication(const float value)
 {
 	MyVector product(this->x * value, this->y * value, this->z * value);
 
 	return product;
 }
 
-Physics::MyVector Physics::MyVector::componentProduct(const MyVector rhs)
+P6::MyVector P6::MyVector::componentProduct(const MyVector rhs)
 {
 	MyVector product(this->x * rhs.x, this->y * rhs.y, this->z * rhs.z);
 
@@ -29,14 +29,14 @@ Physics::MyVector Physics::MyVector::componentProduct(const MyVector rhs)
 }
 
 
-float Physics::MyVector::scalarProduct(const MyVector rhs)
+float P6::MyVector::scalarProduct(const MyVector rhs)
 {
 	float product = (this->x * rhs.x) + (this->y * rhs.y) + (this->z * rhs.z);
 
 	return product;
 }
 
-Physics::MyVector Physics::MyVector::vectorProduct(const MyVector rhs)
+P6::MyVector P6::MyVector::vectorProduct(const MyVector rhs)
 {
 	MyVector product (
 		(this->y * rhs.z) - (this->z * rhs.y), 

@@ -4,7 +4,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
-namespace Physics
+namespace P6
 {
 	class MyVector
 	{
