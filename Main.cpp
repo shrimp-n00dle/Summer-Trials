@@ -9,6 +9,8 @@
 /*P6 and Custom Classes inclusion*/
 #include "P6/MyVector.h"
 #include "P6/MyParticle.h"
+#include "P6/PhysicsWorld.h"
+
 #include "Classes/Model.h"
 #include "Classes/Shader.h"
 
@@ -74,7 +76,7 @@ int main(void)
     Shader modelShader = Shader();
 
     /*Model*/
-    Model model = Model("3D/sphere.obj");
+   Model model = Model("3D/sphere.obj");
 
     /*Model Transformations*/
     P6::MyVector sample(0, 0, 0);
@@ -84,11 +86,15 @@ int main(void)
     /*Model Binding*/
     model.bind(modelShader);
 
+    /*PHYSICS WORLD IMPLEMENTATION*/
+    P6::PhysicsWorld pWorld = P6::PhysicsWorld();
+
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
     particle.Velocity = P6::MyVector(1, 0, 0);
     particle.Position = P6::MyVector(0, 0, 0);
     particle.Acceleration = P6::MyVector(-3, 0, 0);
+    pWorld.addParticle(&particle);
 
     //glfwSetKeyCallback(window, Key_Callback);
 
@@ -115,17 +121,27 @@ int main(void)
         {
             //ms converstion
             auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(curr_ns);
-            std::cout << "MS: " << (float)ms.count() << "\n";
+           // std::cout << "MS: " << (float)ms.count() << "\n";
 
             //Reset
             curr_ns -= curr_ns;
 
-            particle.Update((float)ms.count() / 1000);
+            pWorld.Update((float)ms.count() / 1000);
 
-            std::cout << "P6" << std::endl;
+            //if particle is at the center [test for now]
+            if (particle.Position.x <= 0)
+            {
+                  //not deleted but REMOVED FROM THE LIST / 
+                //std::cout << "YEY" << std::endl;
+                particle.Destroy();
+            }
+
+            
+
+           // std::cout << "P6" << std::endl;
         }
 
-        std::cout << "NORMAL" << std::endl;
+        //std::cout << "NORMAL" << std::endl;
 
 
         /* Render here */

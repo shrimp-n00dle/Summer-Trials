@@ -23,9 +23,14 @@ void  P6::MyParticle::updateVelocity(float time)
 
 }
 
-void P6::MyParticle::Update(float time) 
+void P6::MyParticle::updateParticle(float time) 
 {
 	updatePosition(time);
 
 	updateVelocity(time);
+}
+
+void P6::MyParticle::Destroy()
+{
+	bDestroy = true;
 }

@@ -17,6 +17,9 @@ namespace P6
 
 		MyVector Acceleration;
 
+	protected:
+		bool bDestroy = false;
+
 
 	/*METHODS*/
 	protected:
@@ -25,8 +28,13 @@ namespace P6
 		void updateVelocity(float time);
 
 	public:
-		//Updates the particle and the methods above
-		void Update(float time);
+		//Updates the particle and the methods above for EACH PARTICLE
+		void updateParticle(float time);
+
+	public:
+		void Destroy();
+
+		bool IsDestroyed() { return bDestroy; }
 	};
 }
 
