@@ -11,6 +11,7 @@
 #include "P6/MyParticle.h"
 #include "P6/PhysicsWorld.h"
 
+#include "RenderParticle.h"
 #include "Classes/Model.h"
 #include "Classes/Shader.h"
 
@@ -76,7 +77,7 @@ int main(void)
     Shader modelShader = Shader();
 
     /*Model*/
-   Model model = Model("3D/sphere.obj");
+   Model model = Model("3D/sphere.obj",modelShader);
 
     /*Model Transformations*/
     P6::MyVector sample(0, 0, 0);
@@ -89,12 +90,19 @@ int main(void)
     /*PHYSICS WORLD IMPLEMENTATION*/
     P6::PhysicsWorld pWorld = P6::PhysicsWorld();
 
+
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
-    particle.Velocity = P6::MyVector(1, 0, 0);
+    particle.Velocity = P6::MyVector(0, 0, 0);
     particle.Position = P6::MyVector(0, 0, 0);
-    particle.Acceleration = P6::MyVector(-3, 0, 0);
+    particle.Acceleration = P6::MyVector(0, 0, 0);
     pWorld.addParticle(&particle);
+
+    /*RENDER PARTICLE IMPLEMENTATION*/
+    std::list<RenderParticle*> rParticleList;
+
+    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(1, 0, 0));
+    rParticleList.push_back(&rParticle);
 
     //glfwSetKeyCallback(window, Key_Callback);
 
@@ -128,17 +136,16 @@ int main(void)
 
             pWorld.Update((float)ms.count() / 1000);
 
-            //if particle is at the center [test for now]
-            if (particle.Position.x <= 0)
+            for (std::list<RenderParticle*>::iterator i = rParticleList.begin();
+                i != rParticleList.end(); i++)
             {
-                  //not deleted but REMOVED FROM THE LIST / 
-                //std::cout << "YEY" << std::endl;
-                particle.Destroy();
+                (*i)->Draw();
+                std::cout << "P6" << std::endl;
             }
 
             
 
-           // std::cout << "P6" << std::endl;
+         
         }
 
         //std::cout << "NORMAL" << std::endl;
@@ -148,11 +155,11 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         /*Model Modifications*/
-        model.MoveModel(particle.Position);
-        model.scaleModel(sampleScale);
-        model.rotateModel(sampleRotate, 0.0f /*theta*/);
+       // model.moveModel(particle.Position);
+       // model.scaleModel(sampleScale);
+       // model.rotateModel(sampleRotate, 0.0f /*theta*/);
 
-        model.renderModel(modelShader);
+       // model.renderModel();
         /*Model Modifications*/
 
         /* Swap front and back buffers */

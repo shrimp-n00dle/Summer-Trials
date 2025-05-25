@@ -35,21 +35,29 @@ class Model
 
 		std::vector<GLuint> mesh_indicies;
 
+		Shader shader;
+
+		P6::MyVector modelColor;
+
+
 		
 	public:
 		/*Constructor*/
-		Model(std::string name);
+		Model(std::string name, Shader shader);
 
 
 		/*Linear Transformation*/
-		void MoveModel(P6::MyVector newPos);
+		void moveModel(P6::MyVector newPos);
 		void scaleModel(P6::MyVector newScale);
 		void rotateModel(P6::MyVector newAngle, float theta);
 
 
-		void renderModel(Shader shader);
+		void renderModel();
 		void bind(Shader shader);
 		void cleanUp();
+
+		/**/
+		void setColor(P6::MyVector newColor);
 		
 };
 

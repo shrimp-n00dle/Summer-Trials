@@ -1,8 +1,10 @@
 #include "Model.h"
 
 
-Model::Model(std::string name) 
+Model::Model(std::string name, Shader shader) 
 {
+    this->shader = shader;
+
     std::string path = name;
     std::vector<tinyobj::material_t> objMeshShapes;
 
@@ -12,7 +14,7 @@ Model::Model(std::string name)
     bool success = tinyobj::LoadObj(&attributes, &objShapes, &objMeshShapes, &warning, &error, path.c_str());
 }
 
-void Model::MoveModel(P6::MyVector newPos)
+void Model::moveModel(P6::MyVector newPos)
 {
 	transformation_matrix = glm::translate(identity_matrix, glm::vec3(newPos));
 };
@@ -30,7 +32,7 @@ void Model::rotateModel(P6::MyVector newAngle, float theta)
 	 glm::normalize(glm::vec3(newAngle)));
 }
 
-void Model::renderModel(Shader shader)
+void Model::renderModel()
 {
     //Setting the projection 
     unsigned int projLoc = glGetUniformLocation(shader.shaderProg, "projection");
@@ -48,6 +50,11 @@ void Model::renderModel(Shader shader)
        1, //How many matrices to assign
         GL_FALSE, //Transpose
         glm::value_ptr(transformation_matrix)); // pointer to the matrix
+
+
+   /*COLOR CHANGE*/
+   int color = glGetUniformLocation(shader.shaderProg, "currColor");
+   glUniform3f(color, modelColor.x, modelColor.y, modelColor.z);
 
 
    /*Triangle Rendering*/
@@ -122,4 +129,10 @@ void Model::cleanUp()
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+}
+
+void Model::setColor(P6::MyVector newColor)
+{
+    /*How to change color in shaders using code?*/
+    modelColor = newColor;
 }
