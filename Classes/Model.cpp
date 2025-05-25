@@ -53,8 +53,8 @@ void Model::renderModel()
 
 
    /*COLOR CHANGE*/
-   //int color = glGetUniformLocation(shader.shaderProg, "currColor");
-   //glUniform3f(color, modelColor.x, modelColor.y, modelColor.z);
+   int color = glGetUniformLocation(shader.shaderProg, "currColor");
+   glUniform3f(color, modelColor.x, modelColor.y, modelColor.z);
 
 
    /*Triangle Rendering*/

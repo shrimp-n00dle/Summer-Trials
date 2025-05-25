@@ -6,7 +6,7 @@ void RenderParticle::Draw()
 	{
 		/*COLOR*/
 		//model or particle? MODEL MUNA
-		//model->setColor(Color);
+		model->setColor(Color);
 
 		/*POSITION*/
 		model->moveModel(PhysicsParticle->Position);

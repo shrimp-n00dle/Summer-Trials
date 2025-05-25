@@ -102,14 +102,12 @@ int main(void)
     particle.Velocity = P6::MyVector(1, 0, 0);
     particle.Position = P6::MyVector(0, 0, 0);
     particle.Acceleration = P6::MyVector(0, 0, 0);
-
     pWorld.addParticle(&particle);
 
     /*RENDER PARTICLE IMPLEMENTATION*/
     std::list<RenderParticle*> rParticleList;
-    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(2.0f, 1.0f, 1.0f));
+    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 1.0f,0.0f));
     rParticleList.push_back(&rParticle);
-
 
 
 
