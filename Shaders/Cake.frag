@@ -3,8 +3,6 @@
 out vec4 FragColor; //Returns a color
 //Simple shader that colors red
 
-in mat3 currColor;
-
 void main(){
-	FragColor = vec4(currColor, 1.0f); //Ranges from 0 -1
+	FragColor = vec4(3.0f,1.0f,1.0f, 1.0f); //Ranges from 0 -1
 }

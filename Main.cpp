@@ -21,6 +21,12 @@ using namespace std::chrono_literals;
 //This is going to be our time in between "frames"
 constexpr std::chrono::nanoseconds timestep(16ms);
 
+/*CURRENT ISSUES
+
+--scale and velocity does not apply anymore
+--its woring backend but not front end
+*/
+
 
 //Modifier for model's x Position
 float x_mod = 0.0f;
@@ -85,7 +91,7 @@ int main(void)
     P6::MyVector sampleRotate(0.5f, 1.0f, 0.5f);
 
     /*Model Binding*/
-    model.bind(modelShader);
+    model.bind();
 
     /*PHYSICS WORLD IMPLEMENTATION*/
     P6::PhysicsWorld pWorld = P6::PhysicsWorld();
@@ -93,16 +99,19 @@ int main(void)
 
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
-    particle.Velocity = P6::MyVector(0, 0, 0);
+    particle.Velocity = P6::MyVector(1, 0, 0);
     particle.Position = P6::MyVector(0, 0, 0);
     particle.Acceleration = P6::MyVector(0, 0, 0);
+
     pWorld.addParticle(&particle);
 
     /*RENDER PARTICLE IMPLEMENTATION*/
     std::list<RenderParticle*> rParticleList;
-
-    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(1, 0, 0));
+    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(2.0f, 1.0f, 1.0f));
     rParticleList.push_back(&rParticle);
+
+
+
 
     //glfwSetKeyCallback(window, Key_Callback);
 
@@ -134,17 +143,7 @@ int main(void)
             //Reset
             curr_ns -= curr_ns;
 
-            pWorld.Update((float)ms.count() / 1000);
-
-            for (std::list<RenderParticle*>::iterator i = rParticleList.begin();
-                i != rParticleList.end(); i++)
-            {
-                (*i)->Draw();
-                std::cout << "P6" << std::endl;
-            }
-
-            
-
+           pWorld.Update((float)ms.count() / 1000);
          
         }
 
@@ -155,12 +154,19 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         /*Model Modifications*/
-       // model.moveModel(particle.Position);
-       // model.scaleModel(sampleScale);
-       // model.rotateModel(sampleRotate, 0.0f /*theta*/);
+      // model.moveModel(particle.Position);
+      // model.scaleModel(sampleScale);
+      // model.rotateModel(sampleRotate, 0.0f /*theta*/);
 
-       // model.renderModel();
+      //model.renderModel();
         /*Model Modifications*/
+
+        for (std::list<RenderParticle*>::iterator i = rParticleList.begin();
+            i != rParticleList.end(); i++)
+        {
+            (*i)->Draw();
+            std::cout << "P6" << std::endl;
+        }
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

@@ -37,7 +37,7 @@ class Model
 
 		Shader shader;
 
-		P6::MyVector modelColor;
+		glm::vec3 modelColor;
 
 
 		
@@ -53,10 +53,10 @@ class Model
 
 
 		void renderModel();
-		void bind(Shader shader);
+		void bind();
 		void cleanUp();
 
-		/**/
+		/*Color*/
 		void setColor(P6::MyVector newColor);
 		
 };

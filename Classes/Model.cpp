@@ -53,8 +53,8 @@ void Model::renderModel()
 
 
    /*COLOR CHANGE*/
-   int color = glGetUniformLocation(shader.shaderProg, "currColor");
-   glUniform3f(color, modelColor.x, modelColor.y, modelColor.z);
+   //int color = glGetUniformLocation(shader.shaderProg, "currColor");
+   //glUniform3f(color, modelColor.x, modelColor.y, modelColor.z);
 
 
    /*Triangle Rendering*/
@@ -66,7 +66,7 @@ void Model::renderModel()
    glDrawElements(GL_TRIANGLES, mesh_indicies.size(), GL_UNSIGNED_INT, 0);
 }
 
-void Model::bind(Shader shader)
+void Model::bind()
 {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -134,5 +134,5 @@ void Model::cleanUp()
 void Model::setColor(P6::MyVector newColor)
 {
     /*How to change color in shaders using code?*/
-    modelColor = newColor;
+    modelColor = (glm::vec3)newColor;
 }

@@ -17,6 +17,8 @@ void  P6::MyParticle::updateVelocity(float time)
 		//V = (P2 - P1) /  time
 	Velocity = Velocity + (Acceleration.scalarMultiplication(time));
 
+
+
 		//P2 = P1 + Vt
 
 	//Position / time;
