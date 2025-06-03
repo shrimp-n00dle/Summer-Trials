@@ -2,6 +2,8 @@
 
 #include "MyParticle.h"
 
+/*Base class that computes the froce
+to be applied to the target particle*/
 namespace P6
 {
 	class ForceGenerator

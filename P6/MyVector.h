@@ -24,7 +24,7 @@ namespace P6
 			float Magnitude();
 			float magnitude;
 
-			/*Direction*/
+			/*Direction / Normalize*/
 			MyVector Direction();
 
 			/*Addition*/
