@@ -109,7 +109,7 @@ int main(void)
     particle.damping = 1;
     particle.mass = 1;
 
-    particle.addForce(P6::MyVector(1, 0, 0));
+    particle.addForce(P6::MyVector(10, 0, 0));
    
 
     /*FORCE IMPLEMENTATION*/
