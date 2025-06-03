@@ -15,6 +15,8 @@ namespace P6
 
 		MyVector Velocity;
 
+		float damping = 0.9f;
+
 		MyVector Acceleration;
 
 	protected:
@@ -23,6 +25,9 @@ namespace P6
 
 	/*METHODS*/
 	protected:
+		//force gathered before the FIXED update
+		MyVector accumulatedForce = MyVector(0, 0, 0);
+
 		void updatePosition(float time);
 
 		void updateVelocity(float time);
@@ -30,6 +35,9 @@ namespace P6
 	public:
 		//Updates the particle and the methods above for EACH PARTICLE
 		void updateParticle(float time);
+
+		void addForce(MyVector force);
+		void resetForce();
 
 	public:
 		void Destroy();

@@ -137,6 +137,10 @@
     <ClCompile Include="Classes\Shader.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="P6\DragForceGenerator.cpp" />
+    <ClCompile Include="P6\ForceGenerator.cpp" />
+    <ClCompile Include="P6\ForceRegistry.cpp" />
+    <ClCompile Include="P6\GravityForceGenerator.cpp" />
     <ClCompile Include="P6\MyParticle.cpp" />
     <ClCompile Include="P6\MyVector.cpp" />
     <ClCompile Include="P6\PhysicsWorld.cpp" />
@@ -145,6 +149,10 @@
   <ItemGroup>
     <ClInclude Include="Classes\Model.h" />
     <ClInclude Include="Classes\Shader.h" />
+    <ClInclude Include="P6\DragForceGenerator.h" />
+    <ClInclude Include="P6\ForceGenerator.h" />
+    <ClInclude Include="P6\ForceRegistry.h" />
+    <ClInclude Include="P6\GravityForceGenerator.h" />
     <ClInclude Include="P6\MyParticle.h" />
     <ClInclude Include="P6\MyVector.h" />
     <ClInclude Include="P6\PhysicsWorld.h" />

@@ -23,8 +23,9 @@ constexpr std::chrono::nanoseconds timestep(16ms);
 
 /*CURRENT ISSUES
 
---scale and velocity does not apply anymore
---its woring backend but not front end
+--multiple aprticles
+--paticle whould have an id bc they overlap
+--delere when they reach a certain point
 */
 
 
@@ -95,19 +96,42 @@ int main(void)
 
     /*PHYSICS WORLD IMPLEMENTATION*/
     P6::PhysicsWorld pWorld = P6::PhysicsWorld();
+    /*RENDER PARTICLE IMPLEMENTATION*/
+    std::list<RenderParticle*> rParticleList;
 
 
     /*PARTICLE IMPLEMETATION*/
-    P6::MyParticle particle = P6::MyParticle();
-    particle.Velocity = P6::MyVector(1, 0, 0);
-    particle.Position = P6::MyVector(0, 0, 0);
-    particle.Acceleration = P6::MyVector(0, 0, 0);
-    pWorld.addParticle(&particle);
 
-    /*RENDER PARTICLE IMPLEMENTATION*/
-    std::list<RenderParticle*> rParticleList;
-    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 1.0f,0.0f));
-    rParticleList.push_back(&rParticle);
+    //fontain time
+
+    for (int i = 0; i <= 2; i++)
+    {
+        P6::MyParticle particle = P6::MyParticle();
+        particle.Velocity = P6::MyVector(0, 0, 0);
+        particle.Position = P6::MyVector(0, i / 7.0f, 0);
+        particle.Acceleration = P6::MyVector(0, 0, 0);
+        particle.damping = 0.6f;
+        particle.mass = 1;
+
+        particle.addForce(P6::MyVector(0, 1, 0));
+        pWorld.addParticle(&particle);
+
+        RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 1.0f + i, 0.0f));
+        rParticleList.push_back(&rParticle);
+
+        //P6::MyParticle particle2 = P6::MyParticle();
+        //particle2.Velocity = P6::MyVector(0, 0, 0);
+        //particle2.Position = P6::MyVector(0, 0.1f, 0);
+        //particle2.Acceleration = P6::MyVector(0, 0, 0);
+        //pWorld.addParticle(&particle2);
+
+        //RenderParticle rParticle2 = RenderParticle(&particle2, &model, P6::MyVector(2.0f, 0.0f, 0.0f));
+        //rParticleList.push_back(&rParticle2);
+      
+    }
+
+
+
 
 
 
@@ -162,8 +186,9 @@ int main(void)
         for (std::list<RenderParticle*>::iterator i = rParticleList.begin();
             i != rParticleList.end(); i++)
         {
+            //std::cout << "counter: " << *i << std::endl;
             (*i)->Draw();
-            std::cout << "P6" << std::endl;
+            //std::cout << "P6" << std::endl;
         }
 
         /* Swap front and back buffers */

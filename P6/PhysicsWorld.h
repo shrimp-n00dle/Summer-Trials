@@ -1,12 +1,17 @@
 #pragma once
 #include <list>
 #include "MyParticle.h"
+#include "ForceRegistry.h"
+#include "GravityForceGenerator.h"
 
 namespace P6
 {
 	class PhysicsWorld
 	{
 		public:
+
+			ForceRegistry forceRegistry;
+
 			std::list<MyParticle*> particleList;
 
 			void addParticle(MyParticle* particle);
@@ -16,7 +21,11 @@ namespace P6
 
 		private:
 			void updateParticleList();
+
+			GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, -9.8f, 0));
+
 	};
+
 }
 
 
