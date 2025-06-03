@@ -89,11 +89,12 @@ int main(void)
 
     /*Model Transformations*/
     P6::MyVector sample(0, 0, 0);
-    P6::MyVector sampleScale(0.5f, 0.5f, 0.5f);
+    P6::MyVector sampleScale(1, 0.05f, 0.05f);
     P6::MyVector sampleRotate(0.5f, 1.0f, 0.5f);
 
     /*Model Binding*/
     model.bind();
+    model.scaleModel(sampleScale);
 
     /*PHYSICS WORLD IMPLEMENTATION*/
     P6::PhysicsWorld pWorld = P6::PhysicsWorld();
@@ -102,19 +103,22 @@ int main(void)
 
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
-    particle.Velocity = P6::MyVector(0, 0, 0);
-    particle.Position = P6::MyVector(0,0, 0);
-    particle.Acceleration = P6::MyVector(0, 0, 0);
-    particle.damping = 0;
+    particle.Velocity = P6::MyVector(1, 0, 0);
+    particle.Position = P6::MyVector(-0.5f,0,0);
+    particle.Acceleration = P6::MyVector(1, 0, 0);
+    particle.damping = 0.001f;
     particle.mass = 1;
 
-
     particle.addForce(P6::MyVector(0, 0, 0));
-    pWorld.addParticle(&particle);
+   
 
     /*GRAVITY IMPLEMENTATION*/
+    P6::ForceGenerator force;
+    force.updateForce(&particle, 5);
+    pWorld.addParticle(&particle);
+
    // P6::DragForceGenerator drag = P6::DragForceGenerator(0.14, 0.1);
-    //pWorld.forceRegistry.Add(&particle, &drag);
+    pWorld.forceRegistry.Add(&particle, &force);
 
     RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 1.0f, 0.0f));
     rParticleList.push_back(&rParticle);

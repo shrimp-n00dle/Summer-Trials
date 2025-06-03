@@ -15,5 +15,5 @@ void P6::DragForceGenerator::updateForce(MyParticle* particle, float time)
 	MyVector dir = currV.Direction();
 
 	/*Apply the force to the opp direction*/
-	particle->addForce(dir.scalarMultiplication(- dragF));
+	particle->addForce(dir.scalarMultiplication(-dragF));
 }

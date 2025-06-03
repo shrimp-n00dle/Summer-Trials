@@ -9,6 +9,7 @@ namespace P6
 	{
 		private:
 			MyVector Gravity = MyVector(0, -9.8, 0);
+			//MyVector Gravity = MyVector(-9.8, 0, 0);
 
 		public:
 			GravityForceGenerator(const MyVector gravity) : Gravity(gravity) {};
