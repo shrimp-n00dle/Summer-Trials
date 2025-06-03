@@ -103,18 +103,18 @@ int main(void)
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
     particle.Velocity = P6::MyVector(0, 0, 0);
-    particle.Position = P6::MyVector(0,7.0f, 0);
+    particle.Position = P6::MyVector(0,0, 0);
     particle.Acceleration = P6::MyVector(0, 0, 0);
-    particle.damping = 0.6f;
+    particle.damping = 0;
     particle.mass = 1;
 
 
-    particle.addForce(P6::MyVector(0, 1, 0));
+    particle.addForce(P6::MyVector(0, 0, 0));
     pWorld.addParticle(&particle);
 
     /*GRAVITY IMPLEMENTATION*/
-    P6::DragForceGenerator drag = P6::DragForceGenerator(0.14, 0.1);
-    pWorld.forceRegistry.Add(&particle, &drag);
+   // P6::DragForceGenerator drag = P6::DragForceGenerator(0.14, 0.1);
+    //pWorld.forceRegistry.Add(&particle, &drag);
 
     RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 1.0f, 0.0f));
     rParticleList.push_back(&rParticle);
@@ -135,10 +135,6 @@ int main(void)
         //rParticleList.push_back(&rParticle2);
       
     //}
-
-
-
-
 
 
     //glfwSetKeyCallback(window, Key_Callback);
