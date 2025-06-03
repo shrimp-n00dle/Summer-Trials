@@ -13,7 +13,7 @@ void  P6::MyParticle::updatePosition(float time)
 
 void  P6::MyParticle::updateVelocity(float time)
 {
-	Acceleration += accumulatedForce.scalarMultiplication((1 / mass));
+	//Acceleration += accumulatedForce.scalarMultiplication((1 / mass));
 	/*rate of change in position given the certain time*/
 
 
@@ -22,10 +22,7 @@ void  P6::MyParticle::updateVelocity(float time)
 
 	Velocity = Velocity.scalarMultiplication(powf(damping, time));
 
-
-
-
-		//P2 = P1 + Vt
+	//P2 = P1 + Vt
 
 	//Position / time;
 

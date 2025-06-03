@@ -103,22 +103,20 @@ int main(void)
 
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
-    particle.Velocity = P6::MyVector(1, 0, 0);
+    particle.Velocity = P6::MyVector(0.2f, 0, 0);
     particle.Position = P6::MyVector(-0.5f,0,0);
     particle.Acceleration = P6::MyVector(1, 0, 0);
-    particle.damping = 0.001f;
+    particle.damping = 1;
     particle.mass = 1;
 
-    particle.addForce(P6::MyVector(0, 0, 0));
+    particle.addForce(P6::MyVector(1, 0, 0));
    
 
-    /*GRAVITY IMPLEMENTATION*/
+    /*FORCE IMPLEMENTATION*/
     P6::ForceGenerator force;
-    force.updateForce(&particle, 5);
-    pWorld.addParticle(&particle);
-
-   // P6::DragForceGenerator drag = P6::DragForceGenerator(0.14, 0.1);
+    force.updateForce(&particle, 0.1);
     pWorld.forceRegistry.Add(&particle, &force);
+    pWorld.addParticle(&particle);
 
     RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 1.0f, 0.0f));
     rParticleList.push_back(&rParticle);
