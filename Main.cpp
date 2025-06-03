@@ -103,23 +103,51 @@ int main(void)
 
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
-    particle.Velocity = P6::MyVector(0.2f, 0, 0);
+    particle.Velocity = P6::MyVector(0, 0, 0);
     particle.Position = P6::MyVector(-0.5f,0,0);
-    particle.Acceleration = P6::MyVector(1, 0, 0);
     particle.damping = 1;
     particle.mass = 1;
-
-    particle.addForce(P6::MyVector(10, 0, 0));
-   
-
     /*FORCE IMPLEMENTATION*/
-    P6::ForceGenerator force;
+    P6::ForceGenerator force;   
+    particle.Acceleration = P6::MyVector(force.randomForce(), 0, 0);
+    particle.addForce(P6::MyVector(1, 0, 0));
     force.updateForce(&particle, 0.1);
     pWorld.forceRegistry.Add(&particle, &force);
     pWorld.addParticle(&particle);
 
-    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 1.0f, 0.0f));
+    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
     rParticleList.push_back(&rParticle);
+
+    /*SECOND*/
+    P6::MyParticle p2 = P6::MyParticle();
+    p2.Velocity = P6::MyVector(0, 0, 0);
+    p2.Position = P6::MyVector(-0.5f, -0.2f, 0);
+    p2.damping = 1;
+    p2.mass = 1;
+    P6::ForceGenerator f2;
+    p2.Acceleration = P6::MyVector(f2.randomForce(), 0, 0);
+    p2.addForce(P6::MyVector(1, 0, 0));
+    f2.updateForce(&p2, 0.1);
+    pWorld.forceRegistry.Add(&p2, &f2);
+    pWorld.addParticle(&p2);
+    RenderParticle rp2 = RenderParticle(&p2, &model, P6::MyVector(0.0f, 0.0f, 4.0f));
+    rParticleList.push_back(&rp2);
+
+    /*THIRD*/
+    P6::MyParticle p3 = P6::MyParticle();
+    p3.Velocity = P6::MyVector(0, 0, 0);
+    p3.Position = P6::MyVector(-0.5f, -0.4f, 0);
+    p3.damping = 1;
+    p3.mass = 1;
+    P6::ForceGenerator f3;
+    p3.Acceleration = P6::MyVector(f3.randomForce(), 0, 0);
+    p3.addForce(P6::MyVector(1, 0, 0));
+    f3.updateForce(&p3, 0.1);
+    pWorld.forceRegistry.Add(&p3, &f3);
+    pWorld.addParticle(&p3);
+    RenderParticle rp3 = RenderParticle(&p3, &model, P6::MyVector(0.0f, 4.0f, 0.0f));
+    rParticleList.push_back(&rp3);
+
 
     //fontain time
 

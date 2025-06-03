@@ -15,6 +15,8 @@ namespace P6
 			p->addForce(MyVector(0, 0, 0));
 		}
 
+		float randomForce();
+
 		
 		//overload
 		// void UpdateForce(float time)
