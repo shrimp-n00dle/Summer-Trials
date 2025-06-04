@@ -1,6 +1,6 @@
 #include "ForceGenerator.h"
 
-float P6::ForceGenerator::randomForce()
+float P6::ForceGenerator::randomForce(int higher, int lower)
 {
-	return rand() % 30 + 20;
+	return rand() % higher + lower;
 }

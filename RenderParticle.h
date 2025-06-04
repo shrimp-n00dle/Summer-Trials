@@ -33,6 +33,8 @@ public:
 
 	int recordTime(float value, int rank);
 
+	P6::MyVector randomAcceleration();
+
 
 
 };

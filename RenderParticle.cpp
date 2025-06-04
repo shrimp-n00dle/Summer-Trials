@@ -13,7 +13,7 @@ void RenderParticle::Draw()
 		//std::cout << PhysicsParticle->Position.x << "  " << PhysicsParticle->Position.y << "  " << PhysicsParticle->Position.z << "  " << std::endl;
 		
 		/*SCALE*/
-		model->scaleModel(P6::MyVector(0.20f, 0.20f, 0.20f));
+		model->scaleModel(P6::MyVector(0.10f, 0.10f, 0.10f));
 
 		model->renderModel();
 	}
@@ -23,7 +23,6 @@ int RenderParticle::recordTime(float value, int rank)
 {
 	if (!bRecorded)
 	{
-		std::cout << PhysicsParticle->Position.x << std::endl;
 		rank++;
 		std::cout << Name << "Rank: " << rank << " ,total time: " << value << "seconds" << std::endl;
 
@@ -34,3 +33,5 @@ int RenderParticle::recordTime(float value, int rank)
 
 	return rank;
 }
+
+

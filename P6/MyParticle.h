@@ -20,6 +20,8 @@ namespace P6
 
 		MyVector Acceleration;
 
+		bool bBoost = false;
+
 	protected:
 		bool bDestroy = false;
 
@@ -39,6 +41,8 @@ namespace P6
 
 		void addForce(MyVector force);
 		void resetForce();
+
+		float randomAccel();
 
 	public:
 		void Destroy();

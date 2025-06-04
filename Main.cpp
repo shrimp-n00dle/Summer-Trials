@@ -25,6 +25,9 @@ constexpr std::chrono::nanoseconds timestep(16ms);
 
 
 bool bPressed = false;
+float initialPos = -0.6f;
+
+int totalTrack = (-initialPos + 0.6f) * 0.6;
 
 void Key_Callback(GLFWwindow* window, int key, 
                     int scancode /*Physical position of the press*/,
@@ -51,7 +54,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(800, 600, "Jan Vingno", NULL, NULL);
+    window = glfwCreateWindow(1200, 600, "PC01 Jan Elizabeth Vingno", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -66,7 +69,7 @@ int main(void)
 
     glViewport(0, //Min X
                0, //Min Y
-               800, //Width
+               1200, //Width
                600); //Height
     
 
@@ -100,12 +103,12 @@ int main(void)
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
     particle.Velocity = P6::MyVector(0, 0, 0);
-    particle.Position = P6::MyVector(-0.5f,0.4f,0);
+    particle.Position = P6::MyVector(initialPos,0.4f,0);
     particle.damping = 1;
     particle.mass = 1;
     /*FORCE IMPLEMENTATION*/
     P6::ForceGenerator force;   
-    particle.Acceleration = P6::MyVector(force.randomForce(), 0, 0);
+    particle.Acceleration = P6::MyVector(force.randomForce(30,20), 0, 0);
     particle.addForce(P6::MyVector(1, 0, 0));
     force.updateForce(&particle, 0.1);
     pWorld.forceRegistry.Add(&particle, &force);
@@ -117,11 +120,11 @@ int main(void)
     /*SECOND*/
     P6::MyParticle p2 = P6::MyParticle();
     p2.Velocity = P6::MyVector(0, 0, 0);
-    p2.Position = P6::MyVector(-0.5f, 0.2f, 0);
+    p2.Position = P6::MyVector(initialPos, 0.2f, 0);
     p2.damping = 1;
     p2.mass = 1;
     P6::ForceGenerator f2;
-    p2.Acceleration = P6::MyVector(f2.randomForce(), 0, 0);
+    p2.Acceleration = P6::MyVector(f2.randomForce(30,20), 0, 0);
     p2.addForce(P6::MyVector(1, 0, 0));
     f2.updateForce(&p2, 0.1);
     pWorld.forceRegistry.Add(&p2, &f2);
@@ -132,11 +135,11 @@ int main(void)
     /*THIRD*/
     P6::MyParticle p3 = P6::MyParticle();
     p3.Velocity = P6::MyVector(0, 0, 0);
-    p3.Position = P6::MyVector(-0.5f,0.0f, 0);
+    p3.Position = P6::MyVector(initialPos,0.0f, 0);
     p3.damping = 1;
     p3.mass = 1;
     P6::ForceGenerator f3;
-    p3.Acceleration = P6::MyVector(f3.randomForce(), 0, 0);
+    p3.Acceleration = P6::MyVector(f3.randomForce(30,20), 0, 0);
     p3.addForce(P6::MyVector(1, 0, 0));
     f3.updateForce(&p3, 0.1);
     pWorld.forceRegistry.Add(&p3, &f3);
@@ -148,7 +151,7 @@ int main(void)
     /*PLAYER*/
     P6::MyParticle p = P6::MyParticle();
     p.Velocity = P6::MyVector(0, 0, 0);
-    p.Position = P6::MyVector(-0.5f, -0.4f, 0);
+    p.Position = P6::MyVector(initialPos, -0.4f, 0);
     p.damping = 1;
     p.mass = 1;
     P6::ForceGenerator f;
@@ -168,27 +171,29 @@ int main(void)
     auto curr_time = clock::now();
     auto prev_time = curr_time;
     std::chrono::nanoseconds curr_ns(0);
-    std::chrono::nanoseconds timer(0);
+    std::chrono::milliseconds timer(0);
     int ranking = 0;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+       
         /*TIME IMPLEMENTAITION*/
         curr_time = clock::now();
 
         //Duration checker
         auto dur = std::chrono::duration_cast<std::chrono::nanoseconds> (curr_time - prev_time);
 
-        //auto timer = std::chrono::duration_cast<std::chrono::milliseconds>(curr_time - prev_time);
+        auto timeAdd = std::chrono::duration_cast<std::chrono::milliseconds> (curr_time - prev_time);
+        timer += timeAdd;
 
         prev_time = curr_time;
 
-        timer += curr_ns;
+
 
         //accumulate the force based on the no of times you press the space
         if (bPressed) {
-            p.addForce(P6::MyVector(1, 0, 0)); bPressed = false;
+            p.addForce(P6::MyVector(5.0f, 0, 0)); bPressed = false;
         }
 
         //add dur to last iteration to the time since our last frame
@@ -201,6 +206,8 @@ int main(void)
 
             //Reset
             curr_ns -= curr_ns;
+
+            
 
            pWorld.Update((float)ms.count() / 1000);
 
@@ -215,7 +222,18 @@ int main(void)
         for (std::list<RenderParticle*>::iterator i = rParticleList.begin();
             i != rParticleList.end(); i++)
         {
-            if ((*i)->PhysicsParticle->Position.x >= 0.5) (*i)->PhysicsParticle->Destroy();
+
+            //if it reaches more than 60% of the track line
+            if ((*i)->PhysicsParticle->Position.x >= totalTrack)
+            {
+                if (!(*i)->PhysicsParticle->bBoost)
+                {
+                    (*i)->PhysicsParticle->addForce(P6::MyVector((*i)->PhysicsParticle->randomAccel(), 0, 0));
+                    (*i)->PhysicsParticle->bBoost = true;
+                }
+            }
+            //If it reaches the finish line
+            if ((*i)->PhysicsParticle->Position.x >= 0.6) (*i)->PhysicsParticle->Destroy();
 
             if (((*i)->PhysicsParticle->IsDestroyed())) 
                 {
