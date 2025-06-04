@@ -23,24 +23,27 @@ using namespace std::chrono_literals;
 constexpr std::chrono::nanoseconds timestep(16ms);
 
 
-//Modifier for model's x Position
-float x_mod = 0.0f;
 
+bool bPressed = false;
 
 void Key_Callback(GLFWwindow* window, int key, 
                     int scancode /*Physical position of the press*/,
                     int action /*Press/Release*/,
                     int mods /*Which key is held down*/)
 {
-    if (key == GLFW_KEY_D && action == GLFW_PRESS)
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
     {
-        x_mod += 0.1f;
-    }
+        //Each “Space” input adds a force / acceleration on that fram
+       
+        bPressed = true;
+
+       /* if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) bPressed = true;*/
+    } 
+    else { bPressed = false; }
 }
 
 int main(void)
 {
-
     GLFWwindow* window;
 
     /* Initialize the library */
@@ -149,12 +152,12 @@ int main(void)
     p.damping = 1;
     p.mass = 1;
     P6::ForceGenerator f;
-    p.Acceleration = P6::MyVector(f.randomForce(), 0, 0);
+    p.Acceleration = P6::MyVector(1, 0, 0);
     p.addForce(P6::MyVector(1, 0, 0));
     f.updateForce(&p, 0.1);
     pWorld.forceRegistry.Add(&p, &f);
     pWorld.addParticle(&p);
-    RenderParticle rp = RenderParticle("P4 (Player)" ,&p, &model, P6::MyVector(0.0f, 4.0f, 0.0f));
+    RenderParticle rp = RenderParticle("P4 (Player)" ,&p, &model, P6::MyVector(2.0f, 0.0f, 2.0f));
     rParticleList.push_back(&rp);
 
 
@@ -175,15 +178,15 @@ int main(void)
       
     //}
 
-
-    //glfwSetKeyCallback(window, Key_Callback);
+    /*KEYBOARD INPUT*/
+    glfwSetKeyCallback(window, Key_Callback);
 
     /*TIME IMPLEMENTATION*/
     using clock = std::chrono::high_resolution_clock;
     auto curr_time = clock::now();
     auto prev_time = curr_time;
     std::chrono::nanoseconds curr_ns(0);
-    int counter = 0;
+    int ranking = 0;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -198,10 +201,16 @@ int main(void)
 
         prev_time = curr_time;
 
+        //accumulate the force based on the no of times you press the space
+        if (bPressed) {
+            p.addForce(P6::MyVector(1, 0, 0)); bPressed = false;
+        }
+
         //add dur to last iteration to the time since our last frame
         curr_ns += dur;
         if (curr_ns >= timestep)
         {
+            
             //ms converstion
             auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(curr_ns);
 
@@ -209,8 +218,11 @@ int main(void)
             curr_ns -= curr_ns;
 
            pWorld.Update((float)ms.count() / 1000);
-         
+
+           //afterwhich total acceleration goes back to 0
+           p.resetForce();
         }
+       
 
 
 
@@ -224,7 +236,7 @@ int main(void)
 
             if (((*i)->PhysicsParticle->IsDestroyed())) 
                 {
-                   counter = (*i)->recordTime((float)timer.count() / 1000, counter);
+                   ranking = (*i)->recordTime((float)timer.count() / 1000, ranking);
                 } 
            
             (*i)->Draw();
