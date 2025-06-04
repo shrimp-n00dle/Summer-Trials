@@ -23,6 +23,7 @@ int RenderParticle::recordTime(float value, int rank)
 {
 	if (!bRecorded)
 	{
+		std::cout << PhysicsParticle->Position.x << std::endl;
 		rank++;
 		std::cout << Name << "Rank: " << rank << " ,total time: " << value << "seconds" << std::endl;
 

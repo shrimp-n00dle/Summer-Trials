@@ -160,24 +160,6 @@ int main(void)
     RenderParticle rp = RenderParticle("P4 (Player)" ,&p, &model, P6::MyVector(2.0f, 0.0f, 2.0f));
     rParticleList.push_back(&rp);
 
-
-    //fontain time
-
-    //for (int i = 0; i <= 2; i++)
-    //{
-      
-
-        //P6::MyParticle particle2 = P6::MyParticle();
-        //particle2.Velocity = P6::MyVector(0, 0, 0);
-        //particle2.Position = P6::MyVector(0, 0.1f, 0);
-        //particle2.Acceleration = P6::MyVector(0, 0, 0);
-        //pWorld.addParticle(&particle2);
-
-        //RenderParticle rParticle2 = RenderParticle(&particle2, &model, P6::MyVector(2.0f, 0.0f, 0.0f));
-        //rParticleList.push_back(&rParticle2);
-      
-    //}
-
     /*KEYBOARD INPUT*/
     glfwSetKeyCallback(window, Key_Callback);
 
@@ -186,6 +168,7 @@ int main(void)
     auto curr_time = clock::now();
     auto prev_time = curr_time;
     std::chrono::nanoseconds curr_ns(0);
+    std::chrono::nanoseconds timer(0);
     int ranking = 0;
 
     /* Loop until the user closes the window */
@@ -197,9 +180,11 @@ int main(void)
         //Duration checker
         auto dur = std::chrono::duration_cast<std::chrono::nanoseconds> (curr_time - prev_time);
 
-        auto timer = std::chrono::duration_cast<std::chrono::milliseconds> (curr_ns);
+        //auto timer = std::chrono::duration_cast<std::chrono::milliseconds>(curr_time - prev_time);
 
         prev_time = curr_time;
+
+        timer += curr_ns;
 
         //accumulate the force based on the no of times you press the space
         if (bPressed) {
@@ -223,8 +208,6 @@ int main(void)
            p.resetForce();
         }
        
-
-
 
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
