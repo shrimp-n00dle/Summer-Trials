@@ -9,6 +9,7 @@ namespace P6
 
 	/*ATTRIBUTES*/
 	public:
+
 		float mass = 0;
 
 		MyVector Position;

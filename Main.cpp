@@ -22,13 +22,6 @@ using namespace std::chrono_literals;
 //This is going to be our time in between "frames"
 constexpr std::chrono::nanoseconds timestep(16ms);
 
-/*CURRENT ISSUES
-
---multiple aprticles
---paticle whould have an id bc they overlap
---delere when they reach a certain point
-*/
-
 
 //Modifier for model's x Position
 float x_mod = 0.0f;
@@ -55,7 +48,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(600, 600, "Jan Vingno", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "Jan Vingno", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -70,7 +63,7 @@ int main(void)
 
     glViewport(0, //Min X
                0, //Min Y
-               600, //Width
+               800, //Width
                600); //Height
     
 
@@ -104,7 +97,7 @@ int main(void)
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
     particle.Velocity = P6::MyVector(0, 0, 0);
-    particle.Position = P6::MyVector(-0.5f,0,0);
+    particle.Position = P6::MyVector(-0.5f,0.4f,0);
     particle.damping = 1;
     particle.mass = 1;
     /*FORCE IMPLEMENTATION*/
@@ -115,13 +108,13 @@ int main(void)
     pWorld.forceRegistry.Add(&particle, &force);
     pWorld.addParticle(&particle);
 
-    RenderParticle rParticle = RenderParticle(&particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
+    RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
     rParticleList.push_back(&rParticle);
 
     /*SECOND*/
     P6::MyParticle p2 = P6::MyParticle();
     p2.Velocity = P6::MyVector(0, 0, 0);
-    p2.Position = P6::MyVector(-0.5f, -0.2f, 0);
+    p2.Position = P6::MyVector(-0.5f, 0.2f, 0);
     p2.damping = 1;
     p2.mass = 1;
     P6::ForceGenerator f2;
@@ -130,13 +123,13 @@ int main(void)
     f2.updateForce(&p2, 0.1);
     pWorld.forceRegistry.Add(&p2, &f2);
     pWorld.addParticle(&p2);
-    RenderParticle rp2 = RenderParticle(&p2, &model, P6::MyVector(0.0f, 0.0f, 4.0f));
+    RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 0.0f, 4.0f));
     rParticleList.push_back(&rp2);
 
     /*THIRD*/
     P6::MyParticle p3 = P6::MyParticle();
     p3.Velocity = P6::MyVector(0, 0, 0);
-    p3.Position = P6::MyVector(-0.5f, -0.4f, 0);
+    p3.Position = P6::MyVector(-0.5f,0.0f, 0);
     p3.damping = 1;
     p3.mass = 1;
     P6::ForceGenerator f3;
@@ -145,7 +138,23 @@ int main(void)
     f3.updateForce(&p3, 0.1);
     pWorld.forceRegistry.Add(&p3, &f3);
     pWorld.addParticle(&p3);
-    RenderParticle rp3 = RenderParticle(&p3, &model, P6::MyVector(0.0f, 4.0f, 0.0f));
+    RenderParticle rp3 = RenderParticle("P3", &p3, &model, P6::MyVector(0.0f, 4.0f, 0.0f));
+    rParticleList.push_back(&rp3);
+
+
+    /*PLAYER*/
+    P6::MyParticle p = P6::MyParticle();
+    p.Velocity = P6::MyVector(0, 0, 0);
+    p.Position = P6::MyVector(-0.5f, -0.2f, 0);
+    p.damping = 1;
+    p.mass = 1;
+    P6::ForceGenerator f;
+    p.Acceleration = P6::MyVector(f.randomForce(), 0, 0);
+    p.addForce(P6::MyVector(1, 0, 0));
+    f.updateForce(&p, 0.1);
+    pWorld.forceRegistry.Add(&p, &f);
+    pWorld.addParticle(&p);
+    RenderParticle rp = RenderParticle("P4 (Player)" ,& p, &model, P6::MyVector(0.0f, 4.0f, 0.0f));
     rParticleList.push_back(&rp3);
 
 
@@ -184,6 +193,8 @@ int main(void)
         //Duration checker
         auto dur = std::chrono::duration_cast<std::chrono::nanoseconds> (curr_time - prev_time);
 
+        auto timer = std::chrono::duration_cast<std::chrono::nanoseconds> (curr_ns);
+
         prev_time = curr_time;
 
         //add dur to last iteration to the time since our last frame
@@ -192,7 +203,6 @@ int main(void)
         {
             //ms converstion
             auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(curr_ns);
-           // std::cout << "MS: " << (float)ms.count() << "\n";
 
             //Reset
             curr_ns -= curr_ns;
@@ -201,26 +211,19 @@ int main(void)
          
         }
 
-        //std::cout << "NORMAL" << std::endl;
 
 
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        /*Model Modifications*/
-      // model.moveModel(particle.Position);
-      // model.scaleModel(sampleScale);
-      // model.rotateModel(sampleRotate, 0.0f /*theta*/);
-
-      //model.renderModel();
-        /*Model Modifications*/
-
         for (std::list<RenderParticle*>::iterator i = rParticleList.begin();
             i != rParticleList.end(); i++)
         {
-            //std::cout << "counter: " << *i << std::endl;
-            (*i)->Draw();
-            //std::cout << "P6" << std::endl;
+            if ((*i)->PhysicsParticle->Position.x >= 0.5) (*i)->PhysicsParticle->Destroy();
+
+            if (((*i)->PhysicsParticle->IsDestroyed())) (*i)->recordTime((float)timer.count() / 100000);
+           
+             (*i)->Draw();
         }
 
         /* Swap front and back buffers */

@@ -53,3 +53,4 @@ void P6::MyParticle::resetForce()
 
 	Acceleration = MyVector(0,0,0);
 }
+
