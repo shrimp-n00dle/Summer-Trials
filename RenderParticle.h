@@ -20,8 +20,6 @@ public:
 
 	bool bRecorded = false;
 
-	int counter = 0;
-
 public:
 	/*METHODS*/
 	RenderParticle(std::string name,P6::MyParticle* particle, Model* currModel) : Name(name), PhysicsParticle(particle), model(currModel) 
@@ -33,7 +31,7 @@ public:
 
 	void Draw();
 
-	void recordTime(float value);
+	int recordTime(float value, int rank);
 
 
 

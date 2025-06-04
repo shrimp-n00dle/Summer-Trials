@@ -145,7 +145,7 @@ int main(void)
     /*PLAYER*/
     P6::MyParticle p = P6::MyParticle();
     p.Velocity = P6::MyVector(0, 0, 0);
-    p.Position = P6::MyVector(-0.5f, -0.2f, 0);
+    p.Position = P6::MyVector(-0.5f, -0.4f, 0);
     p.damping = 1;
     p.mass = 1;
     P6::ForceGenerator f;
@@ -154,8 +154,8 @@ int main(void)
     f.updateForce(&p, 0.1);
     pWorld.forceRegistry.Add(&p, &f);
     pWorld.addParticle(&p);
-    RenderParticle rp = RenderParticle("P4 (Player)" ,& p, &model, P6::MyVector(0.0f, 4.0f, 0.0f));
-    rParticleList.push_back(&rp3);
+    RenderParticle rp = RenderParticle("P4 (Player)" ,&p, &model, P6::MyVector(0.0f, 4.0f, 0.0f));
+    rParticleList.push_back(&rp);
 
 
     //fontain time
@@ -183,6 +183,7 @@ int main(void)
     auto curr_time = clock::now();
     auto prev_time = curr_time;
     std::chrono::nanoseconds curr_ns(0);
+    int counter = 0;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -193,7 +194,7 @@ int main(void)
         //Duration checker
         auto dur = std::chrono::duration_cast<std::chrono::nanoseconds> (curr_time - prev_time);
 
-        auto timer = std::chrono::duration_cast<std::chrono::nanoseconds> (curr_ns);
+        auto timer = std::chrono::duration_cast<std::chrono::milliseconds> (curr_ns);
 
         prev_time = curr_time;
 
@@ -221,9 +222,12 @@ int main(void)
         {
             if ((*i)->PhysicsParticle->Position.x >= 0.5) (*i)->PhysicsParticle->Destroy();
 
-            if (((*i)->PhysicsParticle->IsDestroyed())) (*i)->recordTime((float)timer.count() / 100000);
+            if (((*i)->PhysicsParticle->IsDestroyed())) 
+                {
+                   counter = (*i)->recordTime((float)timer.count() / 1000, counter);
+                } 
            
-             (*i)->Draw();
+            (*i)->Draw();
         }
 
         /* Swap front and back buffers */

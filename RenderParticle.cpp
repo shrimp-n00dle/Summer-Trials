@@ -19,15 +19,17 @@ void RenderParticle::Draw()
 	}
 }
 
-void RenderParticle::recordTime(float value)
+int RenderParticle::recordTime(float value, int rank)
 {
 	if (!bRecorded)
 	{
-		counter++;
-
-		std::cout << Name << "Rank: " << counter << " ,total time: " << value << "seconds" << std::endl;
+		rank++;
+		std::cout << Name << "Rank: " << rank << " ,total time: " << value << "seconds" << std::endl;
 
 		bRecorded = true;
+
+		
 	}
 
+	return rank;
 }
