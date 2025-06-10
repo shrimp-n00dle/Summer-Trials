@@ -60,6 +60,14 @@ namespace P6
 				return difference;
 			}
 
+			/*Subtraction*/
+			MyVector operator-= (const MyVector rhs)
+			{
+				MyVector difference(this->x -= rhs.x, this->y -= rhs.y, this->z -= rhs.z);
+
+				return difference;
+			}
+
 			/*Scalar Multiplication*/
 			MyVector scalarMultiplication(const float value);
 			
