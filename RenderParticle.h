@@ -27,6 +27,8 @@ public:
 		Color = P6::MyVector(1, 1, 1);
 	}
 
+	RenderParticle() {};
+
 	RenderParticle(std::string name,P6::MyParticle* particle, Model* currModel, P6::MyVector currColor) : Name(name) ,PhysicsParticle(particle), model(currModel), Color(currColor) {};
 
 	void Draw();

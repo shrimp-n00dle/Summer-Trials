@@ -7,7 +7,7 @@ namespace P6
 	class MyParticle
 	{
 
-	/*ATTRIBUTES*/
+		/*ATTRIBUTES*/
 	public:
 
 		float mass = 0;
@@ -22,11 +22,13 @@ namespace P6
 
 		bool bBoost = false;
 
+		std::string Name;
+
 	protected:
 		bool bDestroy = false;
 
 
-	/*METHODS*/
+		/*METHODS*/
 	protected:
 		//force gathered before the FIXED update
 		MyVector accumulatedForce = MyVector(0, 0, 0);
@@ -36,6 +38,21 @@ namespace P6
 		void updateVelocity(float time);
 
 	public:
+
+		MyParticle(std::string name) : Name(name) {};
+
+		MyParticle(const MyParticle& clone)
+		{
+			mass = clone.mass;
+			Position = clone.Position;
+			Velocity = clone.Velocity;
+			damping = clone.damping;
+			Acceleration = clone.Acceleration;
+			bBoost = clone.bBoost;
+			Name = clone.Name;
+
+		};
+
 		//Updates the particle and the methods above for EACH PARTICLE
 		void updateParticle(float time);
 

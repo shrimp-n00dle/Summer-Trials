@@ -3,7 +3,7 @@
 void P6::PhysicsWorld::addParticle(P6::MyParticle* particle)
 {
 	particleList.push_back(particle);
-
+	
 	forceRegistry.Add(particle, &Gravity);
 }
 
