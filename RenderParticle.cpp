@@ -24,7 +24,7 @@ int RenderParticle::recordTime(float value, int rank)
 	if (!bRecorded)
 	{
 		rank++;
-		std::cout << Name << "Rank: " << rank << " ,total time: " << value << "seconds" << std::endl;
+		//std::cout <<  "Rank: " << rank << " ,total time: " << value << "seconds" << std::endl;
 
 		bRecorded = true;
 

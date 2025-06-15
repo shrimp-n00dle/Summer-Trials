@@ -8,7 +8,7 @@
 
 /*P6 and Custom Classes inclusion*/
 #include "P6/MyVector.h"
-#include "P6/MyParticle.h"
+#include "P6/EngineParticle.h"
 #include "P6/PhysicsWorld.h"
 #include "P6/DragForceGenerator.h"
 
@@ -77,31 +77,27 @@ int main(void)
     P6::PhysicsWorld pWorld = P6::PhysicsWorld();
     /*RENDER PARTICLE IMPLEMENTATION*/
     std::list<RenderParticle*> rParticleList;
-    P6::MyParticle particle = P6::MyParticle("particle");
-    RenderParticle rrp = RenderParticle("particle", &particle, &model, P6::MyVector(2.0f, 0.0f, 0.0f));
-
 
 
     //Unique Particle classs and RP identification
    for (int i = 0; i <= 3; i++)
    {
        std::string str = std::to_string(i);
-        P6::MyParticle* p = new P6::MyParticle("p");
+        P6::EngineParticle* p = new P6::EngineParticle();
         p->Velocity = P6::MyVector(0, 0, 0);
         p->Position = P6::MyVector((float)i/10, 0.4f, 0);
-        p->damping = 1;
-        p->mass = 1 * i;
+        p->Acceleration = P6::MyVector(1 * i, 0, 0);
 
-        std::cout << "Position is at " << (float)i / 10 << std::endl;
   
-      /*  P6::ForceGenerator f;
-        p.Acceleration = P6::MyVector(1 * i, 0, 0);
-        p.addForce(P6::MyVector(1 * i, 0, 0));*/
-         //f.updateForce(&particle, 0.1);
-       // pWorld.forceRegistry.Add(&p, &f);
-        //addd names not the particle mismo
+        P6::ForceGenerator f;
+        
+        p->addForce(P6::MyVector(1 * i, 0, 0));
+         f.updateForce(p, 0.1);
+        pWorld.forceRegistry.Add(p, &f);
+
+
         pWorld.addParticle(p);
-        RenderParticle* rp = new RenderParticle("particle" + str, p, &model, P6::MyVector(2.0f, i, 0.0f));
+        RenderParticle* rp = new RenderParticle(p, &model, P6::MyVector(2.0f, i, 0.0f));
        rParticleList.push_back(rp);
        
 
