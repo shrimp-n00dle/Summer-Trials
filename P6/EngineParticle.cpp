@@ -13,7 +13,7 @@ void  P6::EngineParticle::updatePosition(float time)
 
 void  P6::EngineParticle::updateVelocity(float time)
 {
-	//Acceleration += accumulatedForce.scalarMultiplication((1.0f / mass));
+	Acceleration += accumulatedForce.scalarMultiplication((1.0f / mass));
 	/*rate of change in position given the certain time*/
 
 	Velocity = Velocity + (Acceleration.scalarMultiplication(time));
@@ -38,12 +38,12 @@ void P6::EngineParticle::Destroy()
 
 void P6::EngineParticle::addForce(MyVector force)
 {
-	//accumulatedForce += force;
+	accumulatedForce += force;
 }
 
 void P6::EngineParticle::resetForce()
 {
-	//accumulatedForce = MyVector(0, 0, 0);
+	accumulatedForce = MyVector(0, 0, 0);
 
 	Acceleration = MyVector(0, 0, 0);
 }

@@ -27,11 +27,14 @@ public:
 
 	RenderParticle() {};
 
-	RenderParticle(P6::EngineParticle* particle, Model* currModel, P6::MyVector currColor) : PhysicsParticle(particle), model(currModel), Color(currColor) {};
+	RenderParticle(P6::EngineParticle* particle, Model* currModel, P6::MyVector currColor) : PhysicsParticle(particle), model(currModel), Color(currColor) 
+	{
+		
+	};
 
 	void Draw();
 
-	int recordTime(float value, int rank);
+	void checkLifespan(float value);
 
 	P6::MyVector randomAcceleration();
 

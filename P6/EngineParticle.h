@@ -21,7 +21,9 @@ namespace P6
 		float damping = 0.9f;
 
 		/*OPTIONAL*/
-		float mass = 1.0f;
+		float radius = 0.0f;
+		float mass = 0.1f;
+		MyVector accumulatedForce;
 
 
 	protected:
@@ -44,8 +46,6 @@ namespace P6
 		void resetForce();
 
 		float randomAccel();
-
-		void removeParticle();
 
 	public:
 		void Destroy();
