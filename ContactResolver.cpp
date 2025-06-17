@@ -8,5 +8,6 @@ void ContactResolver::resolveContacts(std::vector<P6::ParticleContact*> contacts
 
 	/*for (unsigned i = 0; i < conacts.size(); i++)
 	{
-	*/
+		
+	}*/
 }

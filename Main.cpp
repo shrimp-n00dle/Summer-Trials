@@ -17,6 +17,10 @@
 #include "Classes/Shader.h"
 
 #include "P6/ParticleContact.h"
+#include "P6/AnchorSprings.h"
+#include "P6/ParticleSpring.h"
+
+#include "P6/Rod.h";
 
 //Import the libraries
 #include <chrono>
@@ -103,15 +107,15 @@ int main(void)
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
     //particle.Velocity = P6::MyVector(-0.30, 0.05, 0);
-    particle.Position = P6::MyVector(initialPos,0.4f,0);
-    particle.damping = 1;
-    particle.mass = 5;
+    particle.Position = P6::MyVector(0,0,0);
+   // particle.damping = 1;
+    particle.mass = 50;
     /*FORCE IMPLEMENTATION*/
-    P6::ForceGenerator force;   
+   // P6::ForceGenerator force;   
    // particle.Acceleration = P6::MyVector(force.randomForce(30,20), 0, 0);
-    particle.addForce(P6::MyVector(1, 0, 0));
+   /* particle.addForce(P6::MyVector(1, 0, 0));
     force.updateForce(&particle, 0.1);
-    pWorld.forceRegistry.Add(&particle, &force);
+    pWorld.forceRegistry.Add(&particle, &force);*/
     pWorld.addParticle(&particle);
 
     RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
@@ -120,15 +124,28 @@ int main(void)
     /*SECOND*/
     P6::MyParticle p2 = P6::MyParticle();
     //p2.Velocity = P6::MyVector(0.15, .015, 0);
-    p2.Position = P6::MyVector(0, 0.2f, 0);
-    p2.damping = 1;
-    p2.mass = 5;
+    p2.Position = P6::MyVector(50, 0, 0);
+    //p2.damping = 1;
+    p2.mass = 100;
     P6::ForceGenerator f2;
     //p2.Acceleration = P6::MyVector(f2.randomForce(30,20), 0, 0);
-    p2.addForce(P6::MyVector(1, 0, 0));
+  /*  p2.addForce(P6::MyVector(1, 0, 0));
     f2.updateForce(&p2, 0.1);
-    pWorld.forceRegistry.Add(&p2, &f2);
+    pWorld.forceRegistry.Add(&p2, &f2);*/
     pWorld.addParticle(&p2);
+
+    P6::MyVector forceRod = P6::MyVector(0.0f, 1.0f, 0.0);
+    particle.addForce(forceRod.scalarMultiplication(500000));
+
+    P6::Rod* r = new P6::Rod();
+    r->particles[0] = &particle;
+    r->particles[1] = &p2;
+    r->length = 200;
+
+    pWorld.Links.push_back(r);
+
+    /*P6::ParticleSpring pS = P6::ParticleSpring(&particle, 5, 1);
+    pWorld.forceRegistry.Add(&p2, &pS);*/
     RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 0.0f, 4.0f));
     rParticleList.push_back(&rp2);
 
@@ -147,9 +164,9 @@ int main(void)
     /*PARTICLE CONTACT IMPLEMENTATION*/
     P6::ParticleContact contact = P6::ParticleContact();
     contact.particles[0] = &particle;
-    contact.particles[1] = &p2;
+   //contact.particles[1] = &p2;
 
-    contact.contactNormal = particle.Position - p2.Position;
+    /*contact.contactNormal = particle.Position - p2.Position;
     contact.contactNormal = contact.contactNormal.Direction();
     contact.restitution = 0;
 
@@ -159,7 +176,14 @@ int main(void)
     P6::MyVector dir = particle.Position - p2.Position;
     dir.Direction();
 
-    pWorld.AddContact(&particle, &p2, 1, dir);
+    pWorld.AddContact(&particle, &p2, 1, dir);*/
+
+ /*  P6::AnchorSprings aSpring = P6::AnchorSprings(P6::MyVector(20,0,0), 5, 0.5f);
+
+   pWorld.forceRegistry.Add(&p2, &aSpring);
+
+   p2.mass = 50;*/
+
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -200,6 +224,8 @@ int main(void)
             i != rParticleList.end(); i++)
         {
             /*RESOLVING INTEPRENETRATION*/
+
+           
 
            
             (*i)->Draw();

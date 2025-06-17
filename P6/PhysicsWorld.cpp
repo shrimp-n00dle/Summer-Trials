@@ -36,6 +36,9 @@ void P6::PhysicsWorld::Update(float time)
 		(*p)->updateParticle(time);
 	}
 
+	//call generate contacts here
+	generateContacts();
+
 	if (Contacts.size() > 0)
 	{
 		contactResolver.resolveContacts(Contacts, time);
@@ -52,4 +55,19 @@ void P6::PhysicsWorld::updateParticleList()
 			}
 	);
 
+}
+
+void P6::PhysicsWorld::generateContacts()
+{
+	Contacts.clear();
+
+	for (std::list<ParticleLink*>::iterator i = Links.begin(); i != Links.end(); i++)
+	{
+		ParticleContact* contact = (*i)->GetContact();
+
+		if (contact != nullptr)
+		{
+			Contacts.push_back(contact);
+		}
+	}
 }
