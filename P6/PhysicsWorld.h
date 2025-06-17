@@ -2,7 +2,10 @@
 #include <list>
 #include "MyParticle.h"
 #include "ForceRegistry.h"
+#include "ParticleContact.h"
 #include "GravityForceGenerator.h"
+#include "../ContactResolver.h"
+#include <vector>
 
 namespace P6
 {
@@ -10,6 +13,9 @@ namespace P6
 	{
 		public:
 
+			std::vector<ParticleContact*> Contacts;
+
+			void AddContact(MyParticle* p1, MyParticle* p2, float restitution, MyVector contactNormal);
 			ForceRegistry forceRegistry;
 
 			std::list<MyParticle*> particleList;
@@ -24,6 +30,11 @@ namespace P6
 
 			//GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, -9.8, 0));
 			GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, 0, 0));
+
+		protected:
+
+			ContactResolver contactResolver = ContactResolver(20);
+
 
 	};
 

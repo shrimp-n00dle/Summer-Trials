@@ -7,6 +7,19 @@ void P6::PhysicsWorld::addParticle(P6::MyParticle* particle)
 	forceRegistry.Add(particle, &Gravity);
 }
 
+void P6::PhysicsWorld::AddContact(MyParticle* p1, MyParticle* p2, float restitution, MyVector contactNormal)
+{
+	ParticleContact* toAdd = new ParticleContact();
+
+	//Assign needed variables and values
+	toAdd->particles[0] = p1;
+	toAdd->particles[1] = p2;
+	toAdd->restitution = restitution;
+	toAdd->contactNormal = contactNormal;
+
+	Contacts.push_back(toAdd);
+}
+
 void P6::PhysicsWorld::Update(float time)
 {
 	updateParticleList();
@@ -21,6 +34,11 @@ void P6::PhysicsWorld::Update(float time)
 		//std::cout << "COUNTER: " << *p << std::endl;
 		/*Call the update*/
 		(*p)->updateParticle(time);
+	}
+
+	if (Contacts.size() > 0)
+	{
+		contactResolver.resolveContacts(Contacts, time);
 	}
 }
 

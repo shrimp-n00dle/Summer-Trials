@@ -16,6 +16,8 @@
 #include "Classes/Model.h"
 #include "Classes/Shader.h"
 
+#include "P6/ParticleContact.h"
+
 //Import the libraries
 #include <chrono>
 using namespace std::chrono_literals;
@@ -26,8 +28,6 @@ constexpr std::chrono::nanoseconds timestep(16ms);
 
 bool bPressed = false;
 float initialPos = -0.6f;
-
-int totalTrack = (-initialPos + 0.6f) * 0.6;
 
 void Key_Callback(GLFWwindow* window, int key, 
                     int scancode /*Physical position of the press*/,
@@ -102,13 +102,13 @@ int main(void)
 
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
-    particle.Velocity = P6::MyVector(0, 0, 0);
+    //particle.Velocity = P6::MyVector(-0.30, 0.05, 0);
     particle.Position = P6::MyVector(initialPos,0.4f,0);
     particle.damping = 1;
     particle.mass = 5;
     /*FORCE IMPLEMENTATION*/
     P6::ForceGenerator force;   
-    particle.Acceleration = P6::MyVector(force.randomForce(30,20), 0, 0);
+   // particle.Acceleration = P6::MyVector(force.randomForce(30,20), 0, 0);
     particle.addForce(P6::MyVector(1, 0, 0));
     force.updateForce(&particle, 0.1);
     pWorld.forceRegistry.Add(&particle, &force);
@@ -119,12 +119,12 @@ int main(void)
 
     /*SECOND*/
     P6::MyParticle p2 = P6::MyParticle();
-    p2.Velocity = P6::MyVector(0, 0, 0);
-    p2.Position = P6::MyVector(initialPos, 0.2f, 0);
+    //p2.Velocity = P6::MyVector(0.15, .015, 0);
+    p2.Position = P6::MyVector(0, 0.2f, 0);
     p2.damping = 1;
     p2.mass = 5;
     P6::ForceGenerator f2;
-    p2.Acceleration = P6::MyVector(f2.randomForce(30,20), 0, 0);
+    //p2.Acceleration = P6::MyVector(f2.randomForce(30,20), 0, 0);
     p2.addForce(P6::MyVector(1, 0, 0));
     f2.updateForce(&p2, 0.1);
     pWorld.forceRegistry.Add(&p2, &f2);
@@ -144,6 +144,23 @@ int main(void)
     std::chrono::milliseconds timer(0);
     int ranking = 0;
 
+    /*PARTICLE CONTACT IMPLEMENTATION*/
+    P6::ParticleContact contact = P6::ParticleContact();
+    contact.particles[0] = &particle;
+    contact.particles[1] = &p2;
+
+    contact.contactNormal = particle.Position - p2.Position;
+    contact.contactNormal = contact.contactNormal.Direction();
+    contact.restitution = 0;
+
+    particle.Velocity = P6::MyVector(-0.60,0,0);
+    p2.Velocity = P6::MyVector(0.15, 0, 0);
+
+    P6::MyVector dir = particle.Position - p2.Position;
+    dir.Direction();
+
+    pWorld.AddContact(&particle, &p2, 1, dir);
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -159,13 +176,6 @@ int main(void)
 
         prev_time = curr_time;
 
-
-
-        //accumulate the force based on the no of times you press the space
-        if (bPressed) {
-            p.addForce(P6::MyVector(5.0f, 0, 0)); bPressed = false;
-        }
-
         //add dur to last iteration to the time since our last frame
         curr_ns += dur;
         if (curr_ns >= timestep)
@@ -177,12 +187,9 @@ int main(void)
             //Reset
             curr_ns -= curr_ns;
 
-            
-
            pWorld.Update((float)ms.count() / 1000);
 
-           //afterwhich total acceleration goes back to 0
-           p.resetForce();
+           contact.resolve((float)ms.count() / 1000);
         }
        
 
@@ -192,23 +199,8 @@ int main(void)
         for (std::list<RenderParticle*>::iterator i = rParticleList.begin();
             i != rParticleList.end(); i++)
         {
+            /*RESOLVING INTEPRENETRATION*/
 
-            //if it reaches more than 60% of the track line
-            if ((*i)->PhysicsParticle->Position.x >= totalTrack)
-            {
-                if (!(*i)->PhysicsParticle->bBoost)
-                {
-                    (*i)->PhysicsParticle->addForce(P6::MyVector((*i)->PhysicsParticle->randomAccel(), 0, 0));
-                    (*i)->PhysicsParticle->bBoost = true;
-                }
-            }
-            //If it reaches the finish line
-            if ((*i)->PhysicsParticle->Position.x >= 0.6) (*i)->PhysicsParticle->Destroy();
-
-            if (((*i)->PhysicsParticle->IsDestroyed())) 
-                {
-                   ranking = (*i)->recordTime((float)timer.count() / 1000, ranking);
-                } 
            
             (*i)->Draw();
         }
