@@ -58,7 +58,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1200, 600, "PC01 Jan Elizabeth Vingno", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "PC01 Jan Elizabeth Vingno", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -73,7 +73,7 @@ int main(void)
 
     glViewport(0, //Min X
                0, //Min Y
-               1200, //Width
+               800, //Width
                600); //Height
     
 
@@ -109,7 +109,7 @@ int main(void)
     //particle.Velocity = P6::MyVector(-0.30, 0.05, 0);
     particle.Position = P6::MyVector(0,0,0);
    // particle.damping = 1;
-    particle.mass = 0.05;
+    particle.mass = 5;
     /*FORCE IMPLEMENTATION*/
    // P6::ForceGenerator force;   
    // particle.Acceleration = P6::MyVector(force.randomForce(30,20), 0, 0);
@@ -126,7 +126,7 @@ int main(void)
     //p2.Velocity = P6::MyVector(0.15, .015, 0);
     p2.Position = P6::MyVector(0.4, 0, 0);
     //p2.damping = 1;
-    p2.mass = 0.01;
+    p2.mass = 100;
     //P6::ForceGenerator f2;
     //p2.Acceleration = P6::MyVector(f2.randomForce(30,20), 0, 0);
   /*  p2.addForce(P6::MyVector(1, 0, 0));
@@ -156,7 +156,7 @@ int main(void)
 
     contact.contactNormal = particle.Position - p2.Position;
     contact.contactNormal = contact.contactNormal.Direction();
-    contact.restitution = 0;
+    contact.restitution = 1;
 
     particle.Velocity = P6::MyVector(0.02, 0, 0);
     p2.Velocity = P6::MyVector(-0.04, 0, 0);

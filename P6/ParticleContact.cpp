@@ -25,6 +25,8 @@ void P6::ParticleContact::resolveVelocity(float time)
 	//so we ignore it
 	if (separatingSpeed > 0) return;
 
+	std::cout << "COLLISION!" << std::endl;
+
 	float newSS = -restitution * separatingSpeed;
 
 	//Magnitude of delta velocity
@@ -36,6 +38,8 @@ void P6::ParticleContact::resolveVelocity(float time)
 
 	//if mass == 0 and negative invalid collision if 0 or less
 	if (totalMass <= 0) return;
+
+	std::cout << "COLLISION IS VALID!" << std::endl;
 
 	//Magnitude of impulse vector
 	float impulseMag= deltaSpeed / totalMass;
