@@ -14,7 +14,7 @@ void P6::ParticleContact::resolve(float time)
 {
 	resolveVelocity(time);
 
-	resolveInterpenet(time);
+	//resolveInterpenet(time);
 }
 
 void P6::ParticleContact::resolveVelocity(float time)
@@ -46,7 +46,7 @@ void P6::ParticleContact::resolveVelocity(float time)
 
 	if (particles[1])
 	{
-		MyVector v_b = impulse.scalarMultiplication((float)1 / particles[1]->mass);
+		MyVector v_b = impulse.scalarMultiplication((float)-1 / particles[1]->mass);
 		particles[1]->Velocity = particles[1]->Velocity + v_b;
 	}
 

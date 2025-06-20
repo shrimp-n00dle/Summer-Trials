@@ -109,7 +109,7 @@ int main(void)
     //particle.Velocity = P6::MyVector(-0.30, 0.05, 0);
     particle.Position = P6::MyVector(0,0,0);
    // particle.damping = 1;
-    particle.mass = 50;
+    particle.mass = 0.05;
     /*FORCE IMPLEMENTATION*/
    // P6::ForceGenerator force;   
    // particle.Acceleration = P6::MyVector(force.randomForce(30,20), 0, 0);
@@ -124,30 +124,42 @@ int main(void)
     /*SECOND*/
     P6::MyParticle p2 = P6::MyParticle();
     //p2.Velocity = P6::MyVector(0.15, .015, 0);
-    p2.Position = P6::MyVector(50, 0, 0);
+    p2.Position = P6::MyVector(0.4, 0, 0);
     //p2.damping = 1;
-    p2.mass = 100;
-    P6::ForceGenerator f2;
+    p2.mass = 0.01;
+    //P6::ForceGenerator f2;
     //p2.Acceleration = P6::MyVector(f2.randomForce(30,20), 0, 0);
   /*  p2.addForce(P6::MyVector(1, 0, 0));
     f2.updateForce(&p2, 0.1);
     pWorld.forceRegistry.Add(&p2, &f2);*/
     pWorld.addParticle(&p2);
 
-    P6::MyVector forceRod = P6::MyVector(0.0f, 1.0f, 0.0);
-    particle.addForce(forceRod.scalarMultiplication(500000));
+    //P6::MyVector forceRod = P6::MyVector(0.0f, 1.0f, 0.0);
+    //particle.addForce(forceRod.scalarMultiplication(500000));
 
-    P6::Rod* r = new P6::Rod();
+   /* P6::Rod* r = new P6::Rod();
     r->particles[0] = &particle;
     r->particles[1] = &p2;
     r->length = 200;
 
-    pWorld.Links.push_back(r);
+    pWorld.Links.push_back(r);*/
 
     /*P6::ParticleSpring pS = P6::ParticleSpring(&particle, 5, 1);
     pWorld.forceRegistry.Add(&p2, &pS);*/
     RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 0.0f, 4.0f));
     rParticleList.push_back(&rp2);
+
+    /*PARTICLE CONTACT IMPLEMENTATION*/
+    P6::ParticleContact contact = P6::ParticleContact();
+    contact.particles[0] = &particle;
+    contact.particles[1] = &p2;
+
+    contact.contactNormal = particle.Position - p2.Position;
+    contact.contactNormal = contact.contactNormal.Direction();
+    contact.restitution = 0;
+
+    particle.Velocity = P6::MyVector(0.02, 0, 0);
+    p2.Velocity = P6::MyVector(-0.04, 0, 0);
 
 
     /*KEYBOARD INPUT*/
@@ -162,8 +174,8 @@ int main(void)
     int ranking = 0;
 
     /*PARTICLE CONTACT IMPLEMENTATION*/
-    P6::ParticleContact contact = P6::ParticleContact();
-    contact.particles[0] = &particle;
+  /*  P6::ParticleContact contact = P6::ParticleContact();
+    contact.particles[0] = &particle;*/
    //contact.particles[1] = &p2;
 
     /*contact.contactNormal = particle.Position - p2.Position;
