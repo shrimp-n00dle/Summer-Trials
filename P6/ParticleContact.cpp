@@ -23,7 +23,7 @@ void P6::ParticleContact::resolveVelocity(float time)
 
 	//if greater than 0, it is already moving away
 	//so we ignore it
-	if (separatingSpeed >= 0) 
+	if (separatingSpeed > 0) 
 	{
 		return;
 	}

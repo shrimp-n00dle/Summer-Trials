@@ -138,9 +138,10 @@ int main(void)
     contact.restitution = 1;*/
 
     /*ADD CONTACTS PWORLD IMPLEMENTATION*/
-    particle.Velocity = P6::MyVector(0.1, 0, 0);
+    particle.Velocity = P6::MyVector(0.3, 0, 0);
     p2.Velocity = P6::MyVector(-0.1, 0, 0);
     P6::MyVector dir = particle.Position - p2.Position;
+    dir.Magnitude();
     dir.Direction();
 
     pWorld.AddContact(&particle, &p2, 1, dir);
