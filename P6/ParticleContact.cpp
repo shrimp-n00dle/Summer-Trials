@@ -14,7 +14,7 @@ void P6::ParticleContact::resolve(float time)
 {
 	resolveVelocity(time);
 
-	//resolveInterpenet(time);
+	resolveInterpenet(time);
 }
 
 void P6::ParticleContact::resolveVelocity(float time)
@@ -67,16 +67,18 @@ void P6::ParticleContact::resolveInterpenet(float time)
 
 	//get total mass of the collision
 	float totalMass = (float)1 / particles[0]->mass;
-
 	if (particles[1]) totalMass += (float)1 / particles[1]->mass;
 
-	//Invalid if 
+	//Invalid collision if total mass is 0 or less
 	if (totalMass <= 0) return;
 
+	//How many units to move per total mass
 	float totalMovebyMass = depth / totalMass;
 
+	//Get the vector of the total movement involved
 	MyVector moveByMass = contactNormal.scalarMultiplication(totalMovebyMass);
 
+	//Get the change in position for A
 	MyVector P_a = moveByMass.scalarMultiplication((float)1 / particles[0]->mass);
 
 	//translate a
@@ -84,8 +86,10 @@ void P6::ParticleContact::resolveInterpenet(float time)
 
 	if (particles[1])
 	{
-		MyVector P_b = moveByMass.scalarMultiplication(-(float)1 / particles[0]->mass);
+		//Get the change in position for B in the opp direction
+		MyVector P_b = moveByMass.scalarMultiplication(-(float)1 / particles[1]->mass);
 
+		//Translate B
 		particles[1]->Position += P_b;
 	}
 

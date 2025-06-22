@@ -138,7 +138,7 @@ int main(void)
     contact.restitution = 1;*/
 
     /*ADD CONTACTS PWORLD IMPLEMENTATION*/
-    particle.Velocity = P6::MyVector(0, 0, 0);
+    particle.Velocity = P6::MyVector(0.1, 0, 0);
     p2.Velocity = P6::MyVector(-0.1, 0, 0);
     P6::MyVector dir = particle.Position - p2.Position;
     dir.Direction();
@@ -211,8 +211,6 @@ int main(void)
             curr_ns -= curr_ns;
 
            pWorld.Update((float)ms.count() / 1000);
-
-           contact.resolve((float)ms.count() / 1000);
         }
 
        //std::cout << "PARTICLE 1 POSIION X " << particle.Position.x << std::endl;

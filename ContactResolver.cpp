@@ -11,7 +11,7 @@ void ContactResolver::resolveContacts(std::vector<P6::ParticleContact*> contacts
 	for (unsigned i = 0; i < contacts.size(); i++)
 	{
 		//If Resolve Count > Limit OR if the Separating Speed of the current Contacts >= 0 - End
-		if (i > max_iterations || contacts[i]->GetSeparatingSpeed() >= 0)
+		if (current_iterations > max_iterations || (contacts[i]->GetSeparatingSpeed() >= 0 && contacts[i]->depth <= 0))
 		{
 			return;
 		}
@@ -26,6 +26,20 @@ void ContactResolver::resolveContacts(std::vector<P6::ParticleContact*> contacts
 
 				//Resolve that Contact
 				contacts[i]->resolve(time);
+
+				//Increment resolve count
+				current_iterations++;
+
+			
+			}
+			//OR the Contact with Depth > 0
+			else if (contacts[i]->depth > 0)
+			{
+				//Resolve that Contact
+				contacts[i]->resolve(time);
+
+				//Increment resolve count
+				current_iterations++;
 			}
 
 		}
