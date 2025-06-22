@@ -106,7 +106,7 @@ int main(void)
 
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
-    particle.Position = P6::MyVector(-0.6,0,0);
+    particle.Position = P6::MyVector(0,0,0);
     particle.mass = 1;
     pWorld.addParticle(&particle);
 
@@ -137,8 +137,8 @@ int main(void)
     contact.contactNormal = contact.contactNormal.Direction();
     contact.restitution = 1;
 
-    particle.Velocity = P6::MyVector(0.4, 0, 0);
-    p2.Velocity = P6::MyVector(-0.2, 0, 0);
+     particle.Velocity = P6::MyVector(0, 0, 0);
+    p2.Velocity = P6::MyVector(-0.1, 0, 0);
 
 
     /*KEYBOARD INPUT*/
