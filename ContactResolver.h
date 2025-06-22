@@ -15,5 +15,7 @@ public:
 
 protected:
 	unsigned current_iterations = 0;
+
+	float leastSSpeed;
 };
 

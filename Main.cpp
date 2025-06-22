@@ -128,17 +128,25 @@ int main(void)
     pWorld.forceRegistry.Add(&p2, &drag);
 
     /*PARTICLE CONTACT IMPLEMENTATION*/
-    P6::ParticleContact contact = P6::ParticleContact();
+    /*P6::ParticleContact contact = P6::ParticleContact();
     contact.particles[0] = &particle;
     contact.particles[1] = &p2;
 
     contact.contactNormal = particle.Position - p2.Position;
     contact.contactNormal.magnitude = contact.contactNormal.Magnitude();
     contact.contactNormal = contact.contactNormal.Direction();
-    contact.restitution = 1;
+    contact.restitution = 1;*/
 
-     particle.Velocity = P6::MyVector(0, 0, 0);
+    /*ADD CONTACTS PWORLD IMPLEMENTATION*/
+    particle.Velocity = P6::MyVector(0, 0, 0);
     p2.Velocity = P6::MyVector(-0.1, 0, 0);
+    P6::MyVector dir = particle.Position - p2.Position;
+    dir.Direction();
+
+    pWorld.AddContact(&particle, &p2, 1, dir);
+
+
+
 
 
     /*KEYBOARD INPUT*/

@@ -31,7 +31,6 @@ void P6::PhysicsWorld::Update(float time)
 		p != particleList.end(); p++)
 	
 	{
-		//std::cout << "COUNTER: " << *p << std::endl;
 		/*Call the update*/
 		(*p)->updateParticle(time);
 	}

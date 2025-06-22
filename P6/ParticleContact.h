@@ -16,12 +16,14 @@ namespace P6 {
 
 			void resolve(float time);
 
+			float GetSeparatingSpeed();
+
 		protected:
 
 			//calculates the interpreneatosn resilution
 			void resolveInterpenet(float time);
 
-			float GetSeparatingSpeed();
+			
 			void resolveVelocity(float time);
 
 	};
