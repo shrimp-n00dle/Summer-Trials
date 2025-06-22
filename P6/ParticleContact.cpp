@@ -23,9 +23,13 @@ void P6::ParticleContact::resolveVelocity(float time)
 
 	//if greater than 0, it is already moving away
 	//so we ignore it
-	if (separatingSpeed > 0) return;
+	if (separatingSpeed >= 0) 
+	{
+		return;
+	}
 
 	std::cout << "COLLISION!" << std::endl;
+	std::cout << separatingSpeed << std::endl;
 
 	float newSS = -restitution * separatingSpeed;
 
@@ -41,8 +45,8 @@ void P6::ParticleContact::resolveVelocity(float time)
 
 	std::cout << "COLLISION IS VALID!" << std::endl;
 
-	//Magnitude of impulse vector
-	float impulseMag= deltaSpeed / totalMass;
+	////Magnitude of impulse vector
+	float impulseMag = deltaSpeed / totalMass;
 	MyVector impulse = contactNormal.scalarMultiplication(impulseMag); 
 
 	MyVector v_a = impulse.scalarMultiplication((float)1 / particles[0]->mass);

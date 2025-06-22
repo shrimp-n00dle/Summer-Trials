@@ -33,9 +33,10 @@ P6::MyVector P6::MyVector::componentProduct(const MyVector rhs)
 
 float P6::MyVector::scalarProduct(const MyVector rhs)
 {
-	float product = (this->x * rhs.x) + (this->y * rhs.y) + (this->z * rhs.z);
+	//float product = (this->x * rhs.x) + (this->y * rhs.y) + (this->z * rhs.z);
 
-	return product;
+	return (this->x * rhs.x) + (this->y * rhs.y) + (this->z * rhs.z);
+	//product;
 }
 
 P6::MyVector P6::MyVector::vectorProduct(const MyVector rhs)

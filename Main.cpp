@@ -58,7 +58,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(800, 600, "PC01 Jan Elizabeth Vingno", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "Jan Elizabeth Vingno", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -106,16 +106,8 @@ int main(void)
 
     /*PARTICLE IMPLEMETATION*/
     P6::MyParticle particle = P6::MyParticle();
-    //particle.Velocity = P6::MyVector(-0.30, 0.05, 0);
-    particle.Position = P6::MyVector(0,0,0);
-   // particle.damping = 1;
-    particle.mass = 5;
-    /*FORCE IMPLEMENTATION*/
-   // P6::ForceGenerator force;   
-   // particle.Acceleration = P6::MyVector(force.randomForce(30,20), 0, 0);
-   /* particle.addForce(P6::MyVector(1, 0, 0));
-    force.updateForce(&particle, 0.1);
-    pWorld.forceRegistry.Add(&particle, &force);*/
+    particle.Position = P6::MyVector(-0.6,0,0);
+    particle.mass = 1;
     pWorld.addParticle(&particle);
 
     RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
@@ -123,31 +115,17 @@ int main(void)
 
     /*SECOND*/
     P6::MyParticle p2 = P6::MyParticle();
-    //p2.Velocity = P6::MyVector(0.15, .015, 0);
-    p2.Position = P6::MyVector(0.4, 0, 0);
-    //p2.damping = 1;
-    p2.mass = 100;
-    //P6::ForceGenerator f2;
-    //p2.Acceleration = P6::MyVector(f2.randomForce(30,20), 0, 0);
-  /*  p2.addForce(P6::MyVector(1, 0, 0));
-    f2.updateForce(&p2, 0.1);
-    pWorld.forceRegistry.Add(&p2, &f2);*/
+    p2.Position = P6::MyVector(0.1, 0, 0);
+    p2.mass = 1;
     pWorld.addParticle(&p2);
 
-    //P6::MyVector forceRod = P6::MyVector(0.0f, 1.0f, 0.0);
-    //particle.addForce(forceRod.scalarMultiplication(500000));
-
-   /* P6::Rod* r = new P6::Rod();
-    r->particles[0] = &particle;
-    r->particles[1] = &p2;
-    r->length = 200;
-
-    pWorld.Links.push_back(r);*/
-
-    /*P6::ParticleSpring pS = P6::ParticleSpring(&particle, 5, 1);
-    pWorld.forceRegistry.Add(&p2, &pS);*/
-    RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 0.0f, 4.0f));
+    RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 1.0f,0.0f));
     rParticleList.push_back(&rp2);
+
+    /*DRAG FORCE IMPLEMENTATION*/
+    P6::DragForceGenerator drag = P6::DragForceGenerator(0.014, 0.01);
+    pWorld.forceRegistry.Add(&particle, &drag);
+    pWorld.forceRegistry.Add(&p2, &drag);
 
     /*PARTICLE CONTACT IMPLEMENTATION*/
     P6::ParticleContact contact = P6::ParticleContact();
@@ -155,11 +133,12 @@ int main(void)
     contact.particles[1] = &p2;
 
     contact.contactNormal = particle.Position - p2.Position;
+    contact.contactNormal.magnitude = contact.contactNormal.Magnitude();
     contact.contactNormal = contact.contactNormal.Direction();
     contact.restitution = 1;
 
-    particle.Velocity = P6::MyVector(0.02, 0, 0);
-    p2.Velocity = P6::MyVector(-0.04, 0, 0);
+    particle.Velocity = P6::MyVector(0.4, 0, 0);
+    p2.Velocity = P6::MyVector(-0.2, 0, 0);
 
 
     /*KEYBOARD INPUT*/
@@ -227,6 +206,9 @@ int main(void)
 
            contact.resolve((float)ms.count() / 1000);
         }
+
+       //std::cout << "PARTICLE 1 POSIION X " << particle.Position.x << std::endl;
+       //std::cout << "PARTICLE 2 POSIION X " << p2.Position.x << std::endl;
        
 
         /* Render here */
