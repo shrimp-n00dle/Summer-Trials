@@ -23,7 +23,6 @@ void P6::Bungee::updateForce(MyParticle* anchor, float time)
 	//reaches maximum lowest
 	if (anchor->Position.y <= -restLength && !bDown)
 	{
-		std::cout << "LOWEST POITN" << std::endl;
 		bDown = true;
 		bStarted = true;
 	}
@@ -45,39 +44,6 @@ void P6::Bungee::updateForce(MyParticle* anchor, float time)
 	float bounceBack;
 	
 	bounceBack = -(currLen * abs(mag - restL));
-
-	if (bDown)
-	{
-		std::cout << "BOINCE NACK IS " << bounceBack << std::endl;
-		std::cout << anchor->Position.y << std::endl;
-	}
-
-
-
-	//reaches maximum lowest
-	//if (anchor->Position.y <= -restLength && !bDown)
-	//{
-	//	std::cout << "LOWEST POITN" << std::endl;
-	//	bDown = true;
-	//	bStarted = true;
-	//}
-	//else if (anchor->Position.y >= 0.0f && bDown) bDown = false;
-	//	
-	////go down
-	//if (!bStarted) bounceBack = -springLen * abs(mag - restLength);
-	////bounce up
-	//else if (bDown)
-	//{
-	//	bounceBack = -(springLen * 0.75) * abs(mag - (restLength * 0.75));
-	//	std::cout << anchor->Position.y << std::endl;
-	//}
-	//else if (bStarted) { 
-	//	bounceBack = -(springLen /100) * abs(mag - (restLength /100)); 
-	//	std::cout << "NEW " << bounceBack << std::endl;
-	//}
-
-
-	//std::cout << anchor->Position.y << std::endl;
 
 	//get the direction from the particle to the anchor point
 	force = force.Direction();
