@@ -5,8 +5,6 @@ float P6::ParticleContact::GetSeparatingSpeed()
 	MyVector velocity = particles[0]->Velocity;
 
 	if (particles[1]) velocity -= particles[1]->Velocity;
-
-	//std::cout << "HELLO " << velocity.scalarProduct(contactNormal) << std::endl;
 	return velocity.scalarProduct(contactNormal);
 
 }
@@ -29,8 +27,8 @@ void P6::ParticleContact::resolveVelocity(float time)
 		return;
 	}
 
-	std::cout << "COLLISION!" << std::endl;
-	std::cout << separatingSpeed << std::endl;
+	/*std::cout << "COLLISION!" << std::endl;
+	std::cout << separatingSpeed << std::endl;*/
 
 	float newSS = -restitution * separatingSpeed;
 
@@ -44,7 +42,7 @@ void P6::ParticleContact::resolveVelocity(float time)
 	//if mass == 0 and negative invalid collision if 0 or less
 	if (totalMass <= 0) return;
 
-	std::cout << "COLLISION IS VALID!" << std::endl;
+	//std::cout << "COLLISION IS VALID!" << std::endl;
 
 	////Magnitude of impulse vector
 	float impulseMag = deltaSpeed / totalMass;

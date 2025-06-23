@@ -20,8 +20,10 @@
 #include "P6/ParticleContact.h"
 #include "P6/AnchorSprings.h"
 #include "P6/ParticleSpring.h"
-
 #include "P6/Rod.h";
+
+/*Homework inclusion*/
+#include "P6/HW3/Bungee.h"
 
 //Import the libraries
 #include <chrono>
@@ -121,8 +123,11 @@ int main(void)
     particle.Velocity = P6::MyVector(0, -0.4, 0);
     pWorld.addParticle(&particle);
 
-    P6::ParticleSpring pBungee = P6::ParticleSpring(&pHold, 0.5, 1);
+    P6::Bungee pBungee = P6::Bungee(&pHold, 0.5, 1);
     pWorld.forceRegistry.Add(&particle, &pBungee);
+
+    //P6::ParticleSpring pBungee = P6::ParticleSpring(&pHold, 0.5, 1);
+    //pWorld.forceRegistry.Add(&particle, &pBungee);
 
     RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
     rParticleList.push_back(&rParticle);

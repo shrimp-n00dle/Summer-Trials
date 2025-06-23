@@ -17,7 +17,7 @@ P6::ParticleContact* P6::Rod::GetContact()
 
 	MyVector dir = particles[1]->Position - particles[0]->Position;
 
-	std::cout << "ROD MENTIONED" << std::endl;
+//std::cout << "ROD MENTIONED" << std::endl;
 
 	dir = dir.Direction();
 
