@@ -30,10 +30,12 @@ void P6::Bungee::updateForce(MyParticle* anchor, float time)
 	//bounce up
 	else bounceBack = -(springLen*0.75) * abs(mag - (restLength * 0.2));
 
-	std::cout << anchor->Position.y << std::endl;
+	//std::cout << anchor->Position.y << std::endl;
 
 	//get the direction from the particle to the anchor point
 	force = force.Direction();
+
+	//std::cout << force.Direction().y << std::endl;
 
 	force = force.scalarMultiplication(bounceBack);
 

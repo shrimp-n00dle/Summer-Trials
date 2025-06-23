@@ -144,6 +144,7 @@
     <ClCompile Include="P6\ForceRegistry.cpp" />
     <ClCompile Include="P6\GravityForceGenerator.cpp" />
     <ClCompile Include="P6\HW3\Bungee.cpp" />
+    <ClCompile Include="P6\HW3\Chain.cpp" />
     <ClCompile Include="P6\MyParticle.cpp" />
     <ClCompile Include="P6\MyVector.cpp" />
     <ClCompile Include="P6\ParticleContact.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="P6\ForceRegistry.h" />
     <ClInclude Include="P6\GravityForceGenerator.h" />
     <ClInclude Include="P6\HW3\Bungee.h" />
+    <ClInclude Include="P6\HW3\Chain.h" />
     <ClInclude Include="P6\MyParticle.h" />
     <ClInclude Include="P6\MyVector.h" />
     <ClInclude Include="P6\ParticleContact.h" />

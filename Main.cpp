@@ -24,6 +24,7 @@
 
 /*Homework inclusion*/
 #include "P6/HW3/Bungee.h"
+#include "P6/HW3/Chain.h"
 
 //Import the libraries
 #include <chrono>
@@ -108,78 +109,51 @@ int main(void)
     std::list<RenderParticle*> rParticleList;
 
     /*PARTICLE IMPLEMETATION - BUNGEE*/
-    P6::MyParticle pHold = P6::MyParticle();
-    pHold.Position = P6::MyVector(0.2, 0.5, 0);
-    pHold.mass = 1;
-    pHold.Velocity = P6::MyVector(0, 0, 0);
-    pWorld.addParticle(&pHold);
-    RenderParticle rphold = RenderParticle("Pholder", &pHold, &model, P6::MyVector(0.0f, 1.0f, 0.0f));
-    rParticleList.push_back(&rphold);
+    P6::MyParticle pBungeeAnchor = P6::MyParticle();
+    pBungeeAnchor.Position = P6::MyVector(-0.2, 0.5, 0);
+    pBungeeAnchor.mass = 1;
+    pBungeeAnchor.Velocity = P6::MyVector(0, 0, 0);
+    pWorld.addParticle(&pBungeeAnchor);
+    RenderParticle rBunA = RenderParticle("Pholder", &pBungeeAnchor, &model, P6::MyVector(0.0f, 0.0f, 0.0f));
+    rParticleList.push_back(&rBunA);
 
     P6::MyParticle particle = P6::MyParticle();
-    particle.Position = P6::MyVector(0.2,0,0);
+    particle.Position = P6::MyVector(-0.2,0,0);
     particle.mass = 1;
     particle.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
     particle.Velocity = P6::MyVector(0, -0.4, 0);
     pWorld.addParticle(&particle);
 
-    P6::Bungee pBungee = P6::Bungee(&pHold, 0.5, 1);
+    P6::Bungee pBungee = P6::Bungee(&pBungeeAnchor, 0.5, 1);
     pWorld.forceRegistry.Add(&particle, &pBungee);
-
-    //P6::ParticleSpring pBungee = P6::ParticleSpring(&pHold, 0.5, 1);
-    //pWorld.forceRegistry.Add(&particle, &pBungee);
 
     RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
     rParticleList.push_back(&rParticle);
 
 
-
-    /*SECOND - CHAIN*/
-    P6::MyParticle p = P6::MyParticle();
-    p.Position = P6::MyVector(-0.4, 0.5, 0);
-    p.mass = 1;
-    p.Velocity = P6::MyVector(0, 0, 0);
-    pWorld.addParticle(&p);
-    RenderParticle rp = RenderParticle("P", &p, &model, P6::MyVector(0.0f, 1.0f, 0.0f));
-    rParticleList.push_back(&rp);
+    /*SECOND PARITCLE - CHAIN*/
+    P6::MyParticle pChainAnchor = P6::MyParticle();
+    pChainAnchor.Position = P6::MyVector(0.4, 0.5, 0);
+    pChainAnchor.mass = 1;
+    pChainAnchor.Velocity = P6::MyVector(0, 0, 0);
+    pWorld.addParticle(&pChainAnchor);
+    RenderParticle rChainA = RenderParticle("CAnchor", &pChainAnchor, &model, P6::MyVector(0.0f, 1.0f, 0.0f));
+    rParticleList.push_back(&rChainA);
 
     P6::MyParticle p2 = P6::MyParticle();
-    p2.Position = P6::MyVector(-0.3, 0.5, 0);
+    p2.Position = P6::MyVector(0.4, 0, 0);
     p2.mass = 1;
-    p2.Velocity = P6::MyVector(0, -0.5, 0);
-    //p2.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
+    p2.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
+    p2.Velocity = P6::MyVector(0, -0.4, 0);
     pWorld.addParticle(&p2);
 
-    P6::Rod* r = new P6::Rod();
-    r->particles[0] = &p;
-    r->particles[1] = &p2;
-    r->length = 0.2;
-    pWorld.Links.push_back(r);
+
+    P6::Chain pChain = P6::Chain(&pChainAnchor, 0.5, 1);
+    pWorld.forceRegistry.Add(&p2, &pChain);
+
 
     RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 0.0f,1.0f));
     rParticleList.push_back(&rp2);
-
-    /*DRAG FORCE IMPLEMENTATION*/
-    //P6::DragForceGenerator drag = P6::DragForceGenerator(0.014, 0.01);
-    //pWorld.forceRegistry.Add(&particle, &drag);
-    //pWorld.forceRegistry.Add(&p2, &drag);
-
-    /*ADD CONTACTS PWORLD IMPLEMENTATION*/
- /*   p.Velocity = P6::MyVector(0, -0.5, 0);
-    p2.Velocity = P6::MyVector(-0.1, 0, 0);
-    P6::MyVector dir = p.Position - p2.Position;
-    dir.Magnitude();
-    dir.Direction();*/
-
-
-    /*SPRING AND ROD IMPLEMENTATION*/
-  /*  P6::AnchorSprings aSpring = P6::AnchorSprings(P6::MyVector(0.1, 0, 0), 1, 0.5);
-    pWorld.forceRegistry.Add(&particle, &aSpring); */
-
-
-
-    //P6::AnchorSprings aSpring2 = P6::AnchorSprings(P6::MyVector(0.2, 0, 0), 1, 0.5);
-    //pWorld.forceRegistry.Add(&p2, &aSpring2);
 
 
 
@@ -220,15 +194,7 @@ int main(void)
             //Reset
             curr_ns -= curr_ns;
 
-           pWorld.Update((float)ms.count() / 1000);
-
-           /*FOR BUNGEE*/
-           //Gravity.updateForce(&p2, (float)ms.count() / 1000);
-
-           /*FOR CHAIN*/
-           //pChain.chainUpdate(&p2, (float)ms.count() / 1000);
-
-          
+            pWorld.Update((float)ms.count() / 1000);
         }
 
       
