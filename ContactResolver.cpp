@@ -3,7 +3,8 @@
 
 void ContactResolver::resolveContacts(std::vector<P6::ParticleContact*> contacts, float time)
 {
-
+	//restart when a new loop appears
+	current_iterations = 0;
 	//Assign the least speed to the first value
 	leastSSpeed = contacts[0]->GetSeparatingSpeed();
 
@@ -15,7 +16,8 @@ void ContactResolver::resolveContacts(std::vector<P6::ParticleContact*> contacts
 			//Get the Contact with the LEAST Separating Speed
 			float currSpeed = contacts[i]->GetSeparatingSpeed();
 
-			if (leastSSpeed >= currSpeed) leastSSpeed = currSpeed;
+			if (leastSSpeed >= currSpeed || contacts[i]->depth > 0) leastSSpeed = currSpeed;
+
 
 		}
 
@@ -23,7 +25,7 @@ void ContactResolver::resolveContacts(std::vector<P6::ParticleContact*> contacts
 		for (unsigned i = 0; i < contacts.size(); i++)
 		{
 			float currSpeed = contacts[i]->GetSeparatingSpeed();
-			if (leastSSpeed == currSpeed)
+			if (leastSSpeed == currSpeed || contacts[i]->GetSeparatingSpeed() >= 0 && contacts[i]->depth <= 0)
 			{
 				contacts[i]->resolve(time);
 
@@ -33,7 +35,7 @@ void ContactResolver::resolveContacts(std::vector<P6::ParticleContact*> contacts
 			}
 		}
 
-	}
+	}else return;
 
 	
 
