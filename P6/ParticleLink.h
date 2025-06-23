@@ -13,6 +13,7 @@ namespace P6
 		virtual ParticleContact* GetContact() { return nullptr; };
 
 	protected:
+		//used mainly for interpenetration
 		float currentLength();
 
 	};

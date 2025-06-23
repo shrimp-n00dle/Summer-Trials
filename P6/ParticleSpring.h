@@ -23,6 +23,8 @@ namespace P6
 			//override
 			void updateForce(MyParticle* particle, float time) override;
 
+			void chainUpdate(MyParticle* particle, float time);
+
 	};
 }
 

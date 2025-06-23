@@ -11,6 +11,7 @@
 #include "P6/MyParticle.h"
 #include "P6/PhysicsWorld.h"
 #include "P6/DragForceGenerator.h"
+#include "P6/GravityForceGenerator.h"
 
 #include "RenderParticle.h"
 #include "Classes/Model.h"
@@ -104,61 +105,87 @@ int main(void)
     /*RENDER PARTICLE IMPLEMENTATION*/
     std::list<RenderParticle*> rParticleList;
 
-    /*PARTICLE IMPLEMETATION*/
+    /*PARTICLE IMPLEMETATION - BUNGEE*/
+    P6::MyParticle pHold = P6::MyParticle();
+    pHold.Position = P6::MyVector(0.2, 0.5, 0);
+    pHold.mass = 1;
+    pHold.Velocity = P6::MyVector(0, 0, 0);
+    pWorld.addParticle(&pHold);
+    RenderParticle rphold = RenderParticle("Pholder", &pHold, &model, P6::MyVector(0.0f, 1.0f, 0.0f));
+    rParticleList.push_back(&rphold);
+
     P6::MyParticle particle = P6::MyParticle();
-    particle.Position = P6::MyVector(0,0,0);
+    particle.Position = P6::MyVector(0.2,0,0);
     particle.mass = 1;
+    particle.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
+    particle.Velocity = P6::MyVector(0, -0.4, 0);
     pWorld.addParticle(&particle);
+
+    P6::ParticleSpring pBungee = P6::ParticleSpring(&pHold, 0.5, 1);
+    pWorld.forceRegistry.Add(&particle, &pBungee);
 
     RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
     rParticleList.push_back(&rParticle);
 
-    /*SECOND*/
+
+
+    /*SECOND - CHAIN*/
+    P6::MyParticle p = P6::MyParticle();
+    p.Position = P6::MyVector(-0.4, 0.5, 0);
+    p.mass = 1;
+    p.Velocity = P6::MyVector(0, 0, 0);
+    pWorld.addParticle(&p);
+    RenderParticle rp = RenderParticle("P", &p, &model, P6::MyVector(0.0f, 1.0f, 0.0f));
+    rParticleList.push_back(&rp);
+
     P6::MyParticle p2 = P6::MyParticle();
-    p2.Position = P6::MyVector(0.1, 0, 0);
+    p2.Position = P6::MyVector(-0.3, 0.5, 0);
     p2.mass = 1;
+    p2.Velocity = P6::MyVector(0, -0.5, 0);
+    P6::GravityForceGenerator Gravity = P6::GravityForceGenerator(P6::MyVector(0, -0.098, 0));
+    p2.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
+    
     pWorld.addParticle(&p2);
 
-    RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 1.0f,0.0f));
+    //
+    P6::ParticleSpring pS = P6::ParticleSpring(&p, 0.5, 1);
+    pWorld.forceRegistry.Add(&p2,&pS);
+
+    RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 0.0f,1.0f));
     rParticleList.push_back(&rp2);
 
     /*DRAG FORCE IMPLEMENTATION*/
-    P6::DragForceGenerator drag = P6::DragForceGenerator(0.014, 0.01);
-    pWorld.forceRegistry.Add(&particle, &drag);
-    pWorld.forceRegistry.Add(&p2, &drag);
-
-    /*PARTICLE CONTACT IMPLEMENTATION*/
-    //P6::ParticleContact contact = P6::ParticleContact();
-    //contact.particles[0] = &particle;
-    //contact.particles[1] = &p2;
-
-    //contact.contactNormal = particle.Position - p2.Position;
-    //contact.contactNormal.magnitude = contact.contactNormal.Magnitude();
-    //contact.contactNormal = contact.contactNormal.Direction();
-    //contact.restitution = 1;
+    //P6::DragForceGenerator drag = P6::DragForceGenerator(0.014, 0.01);
+    //pWorld.forceRegistry.Add(&particle, &drag);
+    //pWorld.forceRegistry.Add(&p2, &drag);
 
     /*ADD CONTACTS PWORLD IMPLEMENTATION*/
-    particle.Velocity = P6::MyVector(0.3, 0, 0);
-    p2.Velocity = P6::MyVector(-0.1, 0, 0);
-    P6::MyVector dir = particle.Position - p2.Position;
-    dir.Magnitude();
-    dir.Direction();
+    //particle.Velocity = P6::MyVector(0, -0.5, 0);
+    //p2.Velocity = P6::MyVector(-0.1, 0, 0);
+    //P6::MyVector dir = particle.Position - p2.Position;
+    //dir.Magnitude();
+    //dir.Direction();
 
 
     /*SPRING AND ROD IMPLEMENTATION*/
-    P6::AnchorSprings aSpring = P6::AnchorSprings(P6::MyVector(0, 0.2, 0), 1, 0.5);
-    pWorld.forceRegistry.Add(&particle, &aSpring); 
-
-    P6::Rod * r = new P6::Rod();
-    r->particles[0] = &particle;
-    r->particles[1] = &p2;
-    r->length = 0.1;
-    pWorld.Links.push_back(r);
+  /*  P6::AnchorSprings aSpring = P6::AnchorSprings(P6::MyVector(0.1, 0, 0), 1, 0.5);
+    pWorld.forceRegistry.Add(&particle, &aSpring); */
 
 
-    pWorld.AddContact(&particle, &p2, 1, dir);
 
+    P6::MyVector dir = particle.Position - P6::MyVector(-0.1, 0, 0);
+    dir.Magnitude();
+    dir.Direction();
 
+    //P6::Rod* r = new P6::Rod();
+    //r->particles[0] = &p;
+    //r->particles[1] = &p2;
+    //r->length = 0.2;
+
+    //pWorld.Links.push_back(r);
+
+    //P6::AnchorSprings aSpring2 = P6::AnchorSprings(P6::MyVector(0.2, 0, 0), 1, 0.5);
+    //pWorld.forceRegistry.Add(&p2, &aSpring2);
 
 
 
@@ -172,30 +199,6 @@ int main(void)
     std::chrono::nanoseconds curr_ns(0);
     std::chrono::milliseconds timer(0);
     int ranking = 0;
-
-    /*PARTICLE CONTACT IMPLEMENTATION*/
-  /*  P6::ParticleContact contact = P6::ParticleContact();
-    contact.particles[0] = &particle;*/
-   //contact.particles[1] = &p2;
-
-    /*contact.contactNormal = particle.Position - p2.Position;
-    contact.contactNormal = contact.contactNormal.Direction();
-    contact.restitution = 0;
-
-    particle.Velocity = P6::MyVector(-0.60,0,0);
-    p2.Velocity = P6::MyVector(0.15, 0, 0);
-
-    P6::MyVector dir = particle.Position - p2.Position;
-    dir.Direction();
-
-    pWorld.AddContact(&particle, &p2, 1, dir);*/
-
- /*  P6::AnchorSprings aSpring = P6::AnchorSprings(P6::MyVector(20,0,0), 5, 0.5f);
-
-   pWorld.forceRegistry.Add(&p2, &aSpring);
-
-   p2.mass = 50;*/
-
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -224,23 +227,19 @@ int main(void)
             curr_ns -= curr_ns;
 
            pWorld.Update((float)ms.count() / 1000);
+
+           Gravity.updateForce(&p2, (float)ms.count() / 1000);
+
+           pS.chainUpdate(&p2, (float)ms.count() / 1000);
         }
 
-       //std::cout << "PARTICLE 1 POSIION X " << particle.Position.x << std::endl;
-       //std::cout << "PARTICLE 2 POSIION X " << p2.Position.x << std::endl;
-       
-
+      
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
         for (std::list<RenderParticle*>::iterator i = rParticleList.begin();
             i != rParticleList.end(); i++)
         {
-            /*RESOLVING INTEPRENETRATION*/
-
-           
-
-           
             (*i)->Draw();
         }
 
