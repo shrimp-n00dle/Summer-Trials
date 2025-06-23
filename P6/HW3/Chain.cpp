@@ -26,6 +26,7 @@ void P6::Chain::updateForce(MyParticle* anchor, float time)
 
 	float bounceBack = -springLen * abs(mag - restLength);
 
+	//if it reaches its lowest point, stop physics
 	if ((mag - restLength) >= 0.11) 
 	{
 		freezePos = anchor->Position;
