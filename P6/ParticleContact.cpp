@@ -6,7 +6,7 @@ float P6::ParticleContact::GetSeparatingSpeed()
 
 	if (particles[1]) velocity -= particles[1]->Velocity;
 
-	std::cout << "HELLO " << velocity.scalarProduct(contactNormal) << std::endl;
+	//std::cout << "HELLO " << velocity.scalarProduct(contactNormal) << std::endl;
 	return velocity.scalarProduct(contactNormal);
 
 }

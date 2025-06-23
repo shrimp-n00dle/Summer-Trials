@@ -21,10 +21,16 @@ void P6::ParticleSpring::updateForce(MyParticle* particle, float time)
 
 void P6::ParticleSpring::chainUpdate(MyParticle* particle, float time)
 {
+
+	std::cout << particle[0].Position.y << std::endl;
+
+	if (restLength <= particle[0].Position.y) return;
 	//get current position of the particle
 	MyVector pos = particle->Position;
 
+
 	MyVector force = pos;
+
 
 	float mag = force.Magnitude();
 

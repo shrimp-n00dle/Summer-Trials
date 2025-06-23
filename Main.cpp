@@ -142,14 +142,14 @@ int main(void)
     p2.Position = P6::MyVector(-0.3, 0.5, 0);
     p2.mass = 1;
     p2.Velocity = P6::MyVector(0, -0.5, 0);
-    P6::GravityForceGenerator Gravity = P6::GravityForceGenerator(P6::MyVector(0, -0.098, 0));
-    p2.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
-    
+    //p2.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
     pWorld.addParticle(&p2);
 
-    //
-    P6::ParticleSpring pS = P6::ParticleSpring(&p, 0.5, 1);
-    pWorld.forceRegistry.Add(&p2,&pS);
+    P6::Rod* r = new P6::Rod();
+    r->particles[0] = &p;
+    r->particles[1] = &p2;
+    r->length = 0.2;
+    pWorld.Links.push_back(r);
 
     RenderParticle rp2 = RenderParticle("P2", &p2, &model, P6::MyVector(0.0f, 0.0f,1.0f));
     rParticleList.push_back(&rp2);
@@ -160,11 +160,11 @@ int main(void)
     //pWorld.forceRegistry.Add(&p2, &drag);
 
     /*ADD CONTACTS PWORLD IMPLEMENTATION*/
-    //particle.Velocity = P6::MyVector(0, -0.5, 0);
-    //p2.Velocity = P6::MyVector(-0.1, 0, 0);
-    //P6::MyVector dir = particle.Position - p2.Position;
-    //dir.Magnitude();
-    //dir.Direction();
+ /*   p.Velocity = P6::MyVector(0, -0.5, 0);
+    p2.Velocity = P6::MyVector(-0.1, 0, 0);
+    P6::MyVector dir = p.Position - p2.Position;
+    dir.Magnitude();
+    dir.Direction();*/
 
 
     /*SPRING AND ROD IMPLEMENTATION*/
@@ -172,17 +172,6 @@ int main(void)
     pWorld.forceRegistry.Add(&particle, &aSpring); */
 
 
-
-    P6::MyVector dir = particle.Position - P6::MyVector(-0.1, 0, 0);
-    dir.Magnitude();
-    dir.Direction();
-
-    //P6::Rod* r = new P6::Rod();
-    //r->particles[0] = &p;
-    //r->particles[1] = &p2;
-    //r->length = 0.2;
-
-    //pWorld.Links.push_back(r);
 
     //P6::AnchorSprings aSpring2 = P6::AnchorSprings(P6::MyVector(0.2, 0, 0), 1, 0.5);
     //pWorld.forceRegistry.Add(&p2, &aSpring2);
@@ -228,9 +217,13 @@ int main(void)
 
            pWorld.Update((float)ms.count() / 1000);
 
-           Gravity.updateForce(&p2, (float)ms.count() / 1000);
+           /*FOR BUNGEE*/
+           //Gravity.updateForce(&p2, (float)ms.count() / 1000);
 
-           pS.chainUpdate(&p2, (float)ms.count() / 1000);
+           /*FOR CHAIN*/
+           //pChain.chainUpdate(&p2, (float)ms.count() / 1000);
+
+          
         }
 
       

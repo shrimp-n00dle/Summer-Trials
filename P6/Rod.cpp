@@ -7,6 +7,7 @@ P6::ParticleContact* P6::Rod::GetContact()
 	/*If the current length is the same as the set length do nothing*/
 	if (currLen == length)
 	{
+		std::cout << "DROPPED LIMIT" << std::endl;
 		return nullptr;
 	}
 
@@ -15,6 +16,8 @@ P6::ParticleContact* P6::Rod::GetContact()
 	ret->particles[1] = particles[1];
 
 	MyVector dir = particles[1]->Position - particles[0]->Position;
+
+	std::cout << "ROD MENTIONED" << std::endl;
 
 	dir = dir.Direction();
 
