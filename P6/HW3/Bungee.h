@@ -17,6 +17,7 @@ namespace P6
 	public:
 
 		bool bDown = false;
+		bool bStarted = false;
 		Bungee(MyParticle* anchor, float length, float rlength)
 		{
 			anchorPoint = anchor;

@@ -124,7 +124,7 @@ int main(void)
     particle.Velocity = P6::MyVector(0, -0.4, 0);
     pWorld.addParticle(&particle);
 
-    P6::Bungee pBungee = P6::Bungee(&pBungeeAnchor, 0.5, 1);
+    P6::Bungee pBungee = P6::Bungee(&pBungeeAnchor, 0.5, 0.25);
     pWorld.forceRegistry.Add(&particle, &pBungee);
 
     RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
@@ -137,7 +137,7 @@ int main(void)
     pChainAnchor.mass = 1;
     pChainAnchor.Velocity = P6::MyVector(0, 0, 0);
     pWorld.addParticle(&pChainAnchor);
-    RenderParticle rChainA = RenderParticle("CAnchor", &pChainAnchor, &model, P6::MyVector(0.0f, 1.0f, 0.0f));
+    RenderParticle rChainA = RenderParticle("CAnchor", &pChainAnchor, &model, P6::MyVector(0.0f, 0.0f, 0.0f));
     rParticleList.push_back(&rChainA);
 
     P6::MyParticle p2 = P6::MyParticle();

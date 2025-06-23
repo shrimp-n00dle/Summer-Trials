@@ -3,8 +3,7 @@
 
 /*
 * The code given below gives the behavior of a bungee
-* Similar to a particle spring BUT the key difference is how it bounces back, theres a restitution of 0.5
-* as bungees (in context to the sample on the ppt) doesnt bouce back beyond the initial anchor point
+* it continues to follow gravitational force until it reaches its lowest point
 *
 */
 
@@ -33,12 +32,9 @@ void P6::Chain::updateForce(MyParticle* anchor, float time)
 		bDrop = true;
 	} 
 
-	std::cout << mag - restLength << std::endl;
 
 	//get the direction from the particle to the anchor point
 	force = force.Direction();
-
-	/*std::cout << force.Direction().y << std::endl;*/
 
 	force = force.scalarMultiplication(bounceBack);
 
