@@ -40,6 +40,7 @@ void P6::PhysicsWorld::Update(float time)
 
 	if (Contacts.size() > 0)
 	{
+		//std::cout << "THERS CONTACT" << std::endl;
 		contactResolver.resolveContacts(Contacts, time);
 	}
 }

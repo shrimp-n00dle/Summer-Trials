@@ -128,14 +128,14 @@ int main(void)
     pWorld.forceRegistry.Add(&p2, &drag);
 
     /*PARTICLE CONTACT IMPLEMENTATION*/
-    P6::ParticleContact contact = P6::ParticleContact();
-    contact.particles[0] = &particle;
-    contact.particles[1] = &p2;
+    //P6::ParticleContact contact = P6::ParticleContact();
+    //contact.particles[0] = &particle;
+    //contact.particles[1] = &p2;
 
-    contact.contactNormal = particle.Position - p2.Position;
-    contact.contactNormal.magnitude = contact.contactNormal.Magnitude();
-    contact.contactNormal = contact.contactNormal.Direction();
-    contact.restitution = 1;
+    //contact.contactNormal = particle.Position - p2.Position;
+    //contact.contactNormal.magnitude = contact.contactNormal.Magnitude();
+    //contact.contactNormal = contact.contactNormal.Direction();
+    //contact.restitution = 1;
 
     /*ADD CONTACTS PWORLD IMPLEMENTATION*/
     particle.Velocity = P6::MyVector(0.3, 0, 0);
