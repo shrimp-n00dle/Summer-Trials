@@ -35,7 +35,7 @@ void P6::PhysicsWorld::Update(float time)
 		(*p)->updateParticle(time);
 	}
 
-	//call generate contacts here
+	////call generate contacts here
 	generateContacts();
 
 	if (Contacts.size() > 0)

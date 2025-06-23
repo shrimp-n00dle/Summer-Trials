@@ -128,14 +128,14 @@ int main(void)
     pWorld.forceRegistry.Add(&p2, &drag);
 
     /*PARTICLE CONTACT IMPLEMENTATION*/
-    /*P6::ParticleContact contact = P6::ParticleContact();
+    P6::ParticleContact contact = P6::ParticleContact();
     contact.particles[0] = &particle;
     contact.particles[1] = &p2;
 
     contact.contactNormal = particle.Position - p2.Position;
     contact.contactNormal.magnitude = contact.contactNormal.Magnitude();
     contact.contactNormal = contact.contactNormal.Direction();
-    contact.restitution = 1;*/
+    contact.restitution = 1;
 
     /*ADD CONTACTS PWORLD IMPLEMENTATION*/
     particle.Velocity = P6::MyVector(0.3, 0, 0);
@@ -143,6 +143,18 @@ int main(void)
     P6::MyVector dir = particle.Position - p2.Position;
     dir.Magnitude();
     dir.Direction();
+
+
+    /*SPRING AND ROD IMPLEMENTATION*/
+    P6::AnchorSprings aSpring = P6::AnchorSprings(P6::MyVector(0, 0.2, 0), 1, 0.5);
+    pWorld.forceRegistry.Add(&particle, &aSpring); 
+
+    P6::Rod * r = new P6::Rod();
+    r->particles[0] = &particle;
+    r->particles[1] = &p2;
+    r->length = 0.1;
+    pWorld.Links.push_back(r);
+
 
     pWorld.AddContact(&particle, &p2, 1, dir);
 

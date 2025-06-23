@@ -4,6 +4,7 @@ P6::ParticleContact* P6::Rod::GetContact()
 {
 	float currLen = currentLength();
 
+	/*If the current length is the same as the set length do nothing*/
 	if (currLen == length)
 	{
 		return nullptr;
@@ -22,12 +23,16 @@ P6::ParticleContact* P6::Rod::GetContact()
 	{
 		ret->contactNormal = dir;
 
+		//depth must always be positive to resolve intepenetration
 		ret->depth = currLen - length;
 	}
 
 	else
 	{
+		//invert the direction
 		ret->contactNormal = dir.scalarMultiplication(-1.0f);
+
+		//depth must always be positive
 		ret->depth = length - currLen;
 	}
 
