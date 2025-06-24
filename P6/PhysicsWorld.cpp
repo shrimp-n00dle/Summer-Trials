@@ -77,7 +77,7 @@ void P6::PhysicsWorld::generateContacts()
 
 void P6::PhysicsWorld::getOverlaps()
 {
-	for (int i = 0; i > particleList.size() - 1; i++)
+	for (int i = 0; i < particleList.size() - 1; i++)
 	{
 		std::list<MyParticle*>::iterator a = std::next(particleList.begin(), i);
 
@@ -85,7 +85,7 @@ void P6::PhysicsWorld::getOverlaps()
 		{
 			std::list<MyParticle*>::iterator b = std::next(particleList.begin(), h);
 
-			MyVector mag2Vector = (*a)->Position = (*b)->Position;
+			MyVector mag2Vector = (*a)->Position - (*b)->Position;
 
 			float mag2 = mag2Vector.SqMagnitude();
 			float rad = (*a)->radius + (*b)->radius;
@@ -93,6 +93,7 @@ void P6::PhysicsWorld::getOverlaps()
 
 			if (mag2 <= rad2)
 			{
+				std::cout << "COLLISION DETECTED" << std::endl;
 				MyVector dir = mag2Vector.Direction();
 				float r = rad2 - mag2;
 				float depth = sqrt(r);

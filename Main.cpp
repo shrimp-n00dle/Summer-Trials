@@ -111,9 +111,11 @@ int main(void)
     /*PARTICLE IMPLEMETATION - BUNGEE*/
     P6::MyParticle pBungeeAnchor = P6::MyParticle();
     pBungeeAnchor.Position = P6::MyVector(-0.2, 0.5, 0);
-    pBungeeAnchor.mass = 1;
+    pBungeeAnchor.mass = 10;
+    pBungeeAnchor.restitution = 1;
     pBungeeAnchor.radius = 0.3f;
-    pBungeeAnchor.Velocity = P6::MyVector(0, 0, 0);
+    pBungeeAnchor.Velocity = P6::MyVector(0, -0.1, 0);
+
     pWorld.addParticle(&pBungeeAnchor);
     RenderParticle rBunA = RenderParticle("Pholder", &pBungeeAnchor, &model, P6::MyVector(0.0f, 0.0f, 1.0f));
     rBunA.model->scaleModel(P6::MyVector(pBungeeAnchor.radius, pBungeeAnchor.radius, pBungeeAnchor.radius));
@@ -121,14 +123,15 @@ int main(void)
 
     P6::MyParticle particle = P6::MyParticle();
     particle.Position = P6::MyVector(-0.2,0,0);
-    particle.mass = 1;
+    particle.mass = 15;
     particle.radius = 0.2f;
+    particle.restitution = 1;
     particle.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
-    particle.Velocity = P6::MyVector(0, -0.4, 0);
+    particle.Velocity = P6::MyVector(0, 0.1, 0);
     pWorld.addParticle(&particle);
 
-    P6::Bungee pBungee = P6::Bungee(&pBungeeAnchor, 0.5, 0.25);
-    pWorld.forceRegistry.Add(&particle, &pBungee);
+   // P6::Bungee pBungee = P6::Bungee(&pBungeeAnchor, 0.5, 0.25);
+   // pWorld.forceRegistry.Add(&particle, &pBungee);
 
     RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
     rParticle.model->scaleModel(P6::MyVector(particle.radius, particle.radius, particle.radius));
