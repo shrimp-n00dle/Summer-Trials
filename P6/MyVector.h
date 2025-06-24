@@ -22,6 +22,7 @@ namespace P6
 
 			/*Magnitude*/
 			float Magnitude();
+			float SqMagnitude();
 			float magnitude = 0.0f;
 
 			/*Direction / Normalize*/

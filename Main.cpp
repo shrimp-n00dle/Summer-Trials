@@ -120,6 +120,7 @@ int main(void)
     P6::MyParticle particle = P6::MyParticle();
     particle.Position = P6::MyVector(-0.2,0,0);
     particle.mass = 1;
+    particle.radius = 0.2f;
     particle.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
     particle.Velocity = P6::MyVector(0, -0.4, 0);
     pWorld.addParticle(&particle);
@@ -128,6 +129,7 @@ int main(void)
     pWorld.forceRegistry.Add(&particle, &pBungee);
 
     RenderParticle rParticle = RenderParticle("P1", &particle, &model, P6::MyVector(4.0f, 0.0f, 0.0f));
+    rParticle.model->scaleModel(P6::MyVector(particle.radius, particle.radius, particle.radius));
     rParticleList.push_back(&rParticle);
 
 

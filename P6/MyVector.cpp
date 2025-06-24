@@ -2,12 +2,13 @@
 
 float P6::MyVector::Magnitude()
 {
-	magnitude = //sqrtf(
-					(sqrtf(x * x) + sqrtf(y * y) + sqrt(z * z));
-							//(x * x) + (y * y) + (z*z)
-								//x + y + z
-					//	);
+	magnitude = (sqrtf(x * x) + sqrtf(y * y) + sqrt(z * z));
+	return magnitude;
+}
 
+float P6::MyVector::SqMagnitude()
+{
+	magnitude = ((x * x) + (y * y) + (z * z));
 	return magnitude;
 }
 

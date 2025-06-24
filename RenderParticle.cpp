@@ -13,7 +13,7 @@ void RenderParticle::Draw()
 		//std::cout << PhysicsParticle->Position.x << "  " << PhysicsParticle->Position.y << "  " << PhysicsParticle->Position.z << "  " << std::endl;
 		
 		/*SCALE*/
-		model->scaleModel(P6::MyVector(0.30f, 0.30f, 0.30f));
+		model->scaleModel(P6::MyVector(PhysicsParticle->radius, PhysicsParticle->radius, PhysicsParticle->radius));
 
 		model->renderModel();
 	}

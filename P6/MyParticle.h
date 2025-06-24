@@ -10,6 +10,10 @@ namespace P6
 	/*ATTRIBUTES*/
 	public:
 
+		float radius = 1.0f;
+
+		float restitution = 1.0f;
+
 		float mass = 0;
 
 		MyVector Position;

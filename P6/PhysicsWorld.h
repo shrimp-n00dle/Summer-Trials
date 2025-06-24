@@ -17,7 +17,7 @@ namespace P6
 			std::list<ParticleLink*> Links;
 			std::vector<ParticleContact*> Contacts;
 
-			void AddContact(MyParticle* p1, MyParticle* p2, float restitution, MyVector contactNormal);
+			void AddContact(MyParticle* p1, MyParticle* p2, float restitution, MyVector contactNormal, float depth);
 			ForceRegistry forceRegistry;
 
 			std::list<MyParticle*> particleList;
@@ -38,6 +38,8 @@ namespace P6
 			ContactResolver contactResolver = ContactResolver(20);
 
 			void generateContacts();
+
+			void getOverlaps();
 
 
 	};

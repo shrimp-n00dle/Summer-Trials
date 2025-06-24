@@ -7,7 +7,7 @@ void P6::PhysicsWorld::addParticle(P6::MyParticle* particle)
 	forceRegistry.Add(particle, &Gravity);
 }
 
-void P6::PhysicsWorld::AddContact(MyParticle* p1, MyParticle* p2, float restitution, MyVector contactNormal)
+void P6::PhysicsWorld::AddContact(MyParticle* p1, MyParticle* p2, float restitution, MyVector contactNormal, float depth)
 {
 	ParticleContact* toAdd = new ParticleContact();
 
@@ -16,6 +16,7 @@ void P6::PhysicsWorld::AddContact(MyParticle* p1, MyParticle* p2, float restitut
 	toAdd->particles[1] = p2;
 	toAdd->restitution = restitution;
 	toAdd->contactNormal = contactNormal;
+	toAdd->depth = depth;
 
 	Contacts.push_back(toAdd);
 }
@@ -61,6 +62,8 @@ void P6::PhysicsWorld::generateContacts()
 {
 	Contacts.clear();
 
+	getOverlaps();
+
 	for (std::list<ParticleLink*>::iterator i = Links.begin(); i != Links.end(); i++)
 	{
 		ParticleContact* contact = (*i)->GetContact();
@@ -68,6 +71,36 @@ void P6::PhysicsWorld::generateContacts()
 		if (contact != nullptr)
 		{
 			Contacts.push_back(contact);
+		}
+	}
+}
+
+void P6::PhysicsWorld::getOverlaps()
+{
+	for (int i = 0; i > particleList.size() - 1; i++)
+	{
+		std::list<MyParticle*>::iterator a = std::next(particleList.begin(), i);
+
+		for (int h = i + 1; h < particleList.size(); h++)
+		{
+			std::list<MyParticle*>::iterator b = std::next(particleList.begin(), h);
+
+			MyVector mag2Vector = (*a)->Position = (*b)->Position;
+
+			float mag2 = mag2Vector.SqMagnitude();
+			float rad = (*a)->radius + (*b)->radius;
+			float rad2 = rad * rad;
+
+			if (mag2 <= rad2)
+			{
+				MyVector dir = mag2Vector.Direction();
+				float r = rad2 - mag2;
+				float depth = sqrt(r);
+
+				float restitution = fmin((*a)->restitution, (*b)->restitution);
+
+				AddContact(*a, *b, restitution, dir, depth);
+			}
 		}
 	}
 }
