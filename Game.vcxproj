@@ -173,6 +173,7 @@
     <ClInclude Include="P6\PhysicsWorld.h" />
     <ClInclude Include="P6\Rod.h" />
     <ClInclude Include="RenderParticle.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>

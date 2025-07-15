@@ -12,8 +12,16 @@ uniform mat4 transform;
 //We'll assign the projection Matrix here
 uniform mat4 projection;
 
+//Tex coor / UV is at 0
+//Access the UV and assigns it to aTex
+layout(location = 2) in vec2 aTex;
+
+out vec2 texCoord;
+
 void main(){
 	//gl_Position is predefined
 	//this denotes the final position of the vertex / point
 	gl_Position = projection * transform * vec4(aPos,1.0); //Turns vec3 into vec4
+
+	textCoord = aTex;
 }

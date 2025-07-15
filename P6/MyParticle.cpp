@@ -9,6 +9,19 @@ void  P6::MyParticle::updatePosition(float time)
 
 	Position = Position + Velocity.scalarMultiplication(time) + newAccelValue.scalarMultiplication((1.0f / 2.0f));
 
+	MyVector angularV = AngularVelocity.scalarMultiplication(time);
+	float angleMag = angularV.Magnitude();
+	MyVector MagDir = angularV.Direction();
+
+
+	if (angleMag != 0)
+	{
+		glm::quat rotBy = glm::rotate(glm::mat4(1.f), angleMag, (glm::vec3)MagDir);
+		this->rotation = glm::toMat4(glm::toQuat(this->rotation) * rotBy);
+	}
+
+
+
 }
 
 void  P6::MyParticle::updateVelocity(float time)
@@ -25,6 +38,10 @@ void  P6::MyParticle::updateVelocity(float time)
 	//P2 = P1 + Vt
 
 	//Position / time;
+
+	float mI = MomentOfIntertia();
+	AngularVelocity += accumulatedTorque.scalarMultiplication(time * ((float)1 / mI));
+	AngularVelocity = AngularVelocity.scalarMultiplication(powf(AngularDampening, time));
 
 }
 
@@ -52,6 +69,8 @@ void P6::MyParticle::resetForce()
 	accumulatedForce = MyVector(0,0,0);
 
 	Acceleration = MyVector(0,0,0);
+
+	this->accumulatedTorque = MyVector(0, 0, 0);
 }
 
 float P6::MyParticle::randomAccel()
@@ -63,6 +82,18 @@ float P6::MyParticle::randomAccel()
 	}
 	else return 0.0f;
 
+}
+
+float P6::MyParticle::MomentOfIntertia()
+{
+	return ((float)2 / 5 * mass * radius * radius);
+}
+
+void P6::MyParticle::AddForceAtPoint(MyVector force, MyVector p)
+{
+	this->addForce(force);
+
+	this->accumulatedTorque = p.vectorProduct(force);
 }
 
 

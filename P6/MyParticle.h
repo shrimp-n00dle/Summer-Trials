@@ -2,13 +2,33 @@
 
 #include "MyVector.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/quaternion.hpp"
+
 namespace P6
 {
 	class MyParticle
 	{
 
+	public:
+
+		MyVector AngularVelocity = MyVector(0,0,0);
+		float AngularDampening = 0.9f;
+		glm::mat4 rotation = glm::mat4(1.0f);
+
+		void AddForceAtPoint(MyVector force, MyVector p);
+
+	protected:
+		MyVector accumulatedTorque = MyVector(0, 0, 0);
+		virtual float MomentOfIntertia();
+
 	/*ATTRIBUTES*/
 	public:
+		
 
 		float radius = 1.0f;
 

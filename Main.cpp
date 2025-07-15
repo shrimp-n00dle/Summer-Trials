@@ -32,6 +32,9 @@ using namespace std::chrono_literals;
 //This is going to be our time in between "frames"
 constexpr std::chrono::nanoseconds timestep(16ms);
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 
 
 bool bPressed = false;
@@ -75,6 +78,38 @@ int main(void)
     /*calling the initializing of glad*/
     gladLoadGL();
 
+    /*Image Implementation*/
+  /*  GLfloat UV[]
+    {
+        0.f,1.f,
+        0.f,0.f,
+        1.f,1.f,
+        1.f,0.f,
+        1.f,1.f,
+        1.f,0.f,
+        0.f,1.f,
+        0.f,0.f
+
+    };
+    int img_width, img_height, colorChannels;
+    unsigned char* tex_bytes = stbi_load("3D/shaun.jpg",&img_width, &img_height, &colorChannels, 0);
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_width, img_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_bytes);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    stbi_image_free(tex_bytes);
+    GLuint VAO, VBO, EBO, VBO_UV;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &VBO_UV);
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_UV);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * (sizeof(UV) / sizeof(UV[0])), &UV[0], GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(2);*/
+
     glViewport(0, //Min X
                0, //Min Y
                800, //Width
@@ -111,8 +146,8 @@ int main(void)
     /*PARTICLE IMPLEMETATION - BUNGEE*/
     P6::MyParticle pBungeeAnchor = P6::MyParticle();
     pBungeeAnchor.Position = P6::MyVector(-0.2, 0.5, 0);
-    pBungeeAnchor.mass = 10;
-    pBungeeAnchor.restitution = 1;
+    pBungeeAnchor.mass = 1;
+    pBungeeAnchor.restitution = 0;
     pBungeeAnchor.radius = 0.3f;
     pBungeeAnchor.Velocity = P6::MyVector(0, -0.1, 0);
 
@@ -122,13 +157,15 @@ int main(void)
     rParticleList.push_back(&rBunA);
 
     P6::MyParticle particle = P6::MyParticle();
-    particle.Position = P6::MyVector(-0.2,0,0);
-    particle.mass = 15;
+    particle.Position = P6::MyVector(-0.2,-0.5,0);
+    particle.mass = 1;
     particle.radius = 0.2f;
     particle.restitution = 1;
     particle.addForce(P6::MyVector(0, 0.1, 0).scalarMultiplication(1.0));
     particle.Velocity = P6::MyVector(0, 0.1, 0);
     pWorld.addParticle(&particle);
+
+    particle.AddForceAtPoint(P6::MyVector(-1, 0, 0).scalarMultiplication(100000), P6::MyVector(0, -50, 0));
 
    // P6::Bungee pBungee = P6::Bungee(&pBungeeAnchor, 0.5, 0.25);
    // pWorld.forceRegistry.Add(&particle, &pBungee);
@@ -173,6 +210,10 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        /*Image Implementation*/
+     /*   GLuint tex0Address = glGetUniformLocation(modelShader.shaderProg, "tex0");
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(tex0Address, 0);*/
        
         /*TIME IMPLEMENTAITION*/
         curr_time = clock::now();
