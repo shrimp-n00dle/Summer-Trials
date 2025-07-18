@@ -113,8 +113,8 @@ int main(void)
     pBungeeAnchor.Position = P6::MyVector(-0.2, 0.5, 0);
     pBungeeAnchor.mass = 10;
     pBungeeAnchor.restitution = 1;
-    pBungeeAnchor.radius = 0.3f;
-    pBungeeAnchor.Velocity = P6::MyVector(0, -0.1, 0);
+    pBungeeAnchor.radius = 0.2f;
+    pBungeeAnchor.Velocity = P6::MyVector(0, 0, 0);
 
     pWorld.addParticle(&pBungeeAnchor);
     RenderParticle rBunA = RenderParticle("Pholder", &pBungeeAnchor, &model, P6::MyVector(0.0f, 0.0f, 1.0f));
@@ -122,7 +122,7 @@ int main(void)
     rParticleList.push_back(&rBunA);
 
     P6::MyParticle particle = P6::MyParticle();
-    particle.Position = P6::MyVector(-0.2,0,0);
+    particle.Position = P6::MyVector(-0.2,-0.5,0);
     particle.mass = 15;
     particle.radius = 0.2f;
     particle.restitution = 1;
@@ -137,6 +137,18 @@ int main(void)
     rParticle.model->scaleModel(P6::MyVector(particle.radius, particle.radius, particle.radius));
     rParticleList.push_back(&rParticle);
 
+    /*Contact*/
+ /*   P6::ParticleContact contact = P6::ParticleContact();
+    contact.particles[0] = &pBungeeAnchor; 
+    contact.particles[1] = &particle;
+
+    contact.contactNormal = pBungeeAnchor.Position - particle.Position;
+    contact.contactNormal = contact.contactNormal.Direction();
+    contact.restitution = 1;
+
+    P6::MyVector dir = pBungeeAnchor.Position - particle.Position;
+    dir.Direction();
+    pWorld.AddContact(&pBungeeAnchor, &particle, 1, dir);*/
 
     /*SECOND PARITCLE - CHAIN*/
  /*   P6::MyParticle pChainAnchor = P6::MyParticle();
@@ -197,6 +209,9 @@ int main(void)
             curr_ns -= curr_ns;
 
             pWorld.Update((float)ms.count() / 1000);
+
+            //contact resolve
+            //contact.resolve((float)ms.count() / 1000);
         }
 
       

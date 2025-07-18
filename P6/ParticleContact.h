@@ -20,6 +20,7 @@ namespace P6 {
 
 		protected:
 
+			
 			//calculates the interpreneatosn resilution
 			void resolveInterpenet(float time);
 
